@@ -4,7 +4,8 @@
 *& Description: Section 42 Deductions - Amortization Computation
 *& Transaction: ZFI_CIT_AMORT
 *& Module:      FI - Tax Accounting
-*& Project:     OVL - S/4 HANA Migration
+*& Project:     OVL - ECC 6.0
+*& Compatibility: SAP ECC 6.0 (EHP4+)
 *&---------------------------------------------------------------------*
 REPORT zfi_cit_sec42_amort.
 
@@ -96,23 +97,23 @@ DATA: gv_total_balance TYPE wrbtr,
 *----------------------------------------------------------------------*
 * Selection Screen
 *----------------------------------------------------------------------*
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-001.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
   PARAMETERS:     p_jv    TYPE char10  OBLIGATORY.    " Joint Venture
   PARAMETERS:     p_bukrs TYPE bukrs   OBLIGATORY.    " Company Code
   PARAMETERS:     p_monat TYPE monat   OBLIGATORY.    " Period
   PARAMETERS:     p_gjahr TYPE gjahr   OBLIGATORY.    " Fiscal Year
 SELECTION-SCREEN END OF BLOCK b1.
 
-SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.
-  PARAMETERS:     p_rev   TYPE abap_bool AS CHECKBOX. " Reversal Flag
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.
+  PARAMETERS:     p_rev   TYPE char1 AS CHECKBOX.     " Reversal Flag
 SELECTION-SCREEN END OF BLOCK b2.
 
 *----------------------------------------------------------------------*
 * Initialization
 *----------------------------------------------------------------------*
 INITIALIZATION.
-  TEXT-001 = 'Selection Parameters'.
-  TEXT-002 = 'Reversal Options'.
+  text-001 = 'Selection Parameters'.
+  text-002 = 'Reversal Options'.
 
 *----------------------------------------------------------------------*
 * Start of Selection
@@ -121,7 +122,7 @@ START-OF-SELECTION.
 
   PERFORM validate_input.
 
-  IF p_rev = abap_true.
+  IF p_rev = 'X'.
     PERFORM process_reversal.
   ELSE.
     PERFORM process_amortization.
@@ -136,10 +137,12 @@ START-OF-SELECTION.
 *&---------------------------------------------------------------------*
 FORM validate_input.
 
+  DATA: lv_bukrs TYPE bukrs.
+
   " Validate Company Code
   SELECT SINGLE bukrs FROM t001
-    WHERE bukrs = @p_bukrs
-    INTO @DATA(lv_bukrs).
+    INTO lv_bukrs
+    WHERE bukrs = p_bukrs.
   IF sy-subrc <> 0.
     MESSAGE e001(zfi_sec42) WITH p_bukrs.
     " Company code &1 does not exist
@@ -147,9 +150,9 @@ FORM validate_input.
 
   " Validate Joint Venture exists in Block Master
   SELECT SINGLE * FROM zfi_tax_sec42_block_master
-    WHERE venture_code = @p_jv
-      AND bukrs        = @p_bukrs
-    INTO @gs_block_master.
+    INTO gs_block_master
+    WHERE venture_code = p_jv
+      AND bukrs        = p_bukrs.
   IF sy-subrc <> 0.
     MESSAGE e002(zfi_sec42) WITH p_jv p_bukrs.
     " Joint Venture &1 not found in Block Master for company code &2
@@ -166,9 +169,9 @@ FORM process_amortization.
 
   " Read Block Master entries for the given JV and Company Code
   SELECT * FROM zfi_tax_sec42_block_master
-    WHERE venture_code = @p_jv
-      AND bukrs        = @p_bukrs
-    INTO TABLE @gt_block_master.
+    INTO TABLE gt_block_master
+    WHERE venture_code = p_jv
+      AND bukrs        = p_bukrs.
 
   IF gt_block_master IS INITIAL.
     MESSAGE s003(zfi_sec42) WITH p_jv.
@@ -206,6 +209,8 @@ ENDFORM.
 *&---------------------------------------------------------------------*
 FORM process_status_e.
 
+  DATA: lv_saknr TYPE saknr.
+
   " If not surrendered, close the loop (skip)
   IF gs_block_master-surrendered <> 'Y'.
     RETURN.
@@ -213,8 +218,8 @@ FORM process_status_e.
 
   " Venture is surrendered - read GL accounts from Table-2 (Post Commercial)
   SELECT * FROM zfi_tax_sec42_gl_post_comm
-    WHERE bukrs = @p_bukrs
-    INTO TABLE @gt_gl_post_comm.
+    INTO TABLE gt_gl_post_comm
+    WHERE bukrs = p_bukrs.
 
   IF gt_gl_post_comm IS INITIAL.
     MESSAGE w005(zfi_sec42) WITH p_bukrs.
@@ -227,16 +232,16 @@ FORM process_status_e.
 
     " Validate GL account exists in SKB1
     SELECT SINGLE saknr FROM skb1
-      WHERE bukrs = @p_bukrs
-        AND saknr = @gs_gl_post_comm-hkont
-      INTO @DATA(lv_saknr).
+      INTO lv_saknr
+      WHERE bukrs = p_bukrs
+        AND saknr = gs_gl_post_comm-hkont.
     IF sy-subrc <> 0.
       MESSAGE w006(zfi_sec42) WITH gs_gl_post_comm-hkont p_bukrs.
       " GL account &1 not valid in company code &2
       CONTINUE.
     ENDIF.
 
-    " Read GL balance from FAGLB03 (ACDOCA or FAGLFLEXT)
+    " Read GL balance from FAGLB03 (FAGLFLEXT)
     PERFORM get_gl_balance
       USING    gs_block_master-venture_code
                gs_gl_post_comm-hkont
@@ -288,12 +293,13 @@ FORM process_surrendered_venture.
 
   DATA: lv_instl_year TYPE gjahr,
         lv_instl_no   TYPE numc2,
-        lv_instl_amt  TYPE wrbtr.
+        lv_instl_amt  TYPE wrbtr,
+        lv_saknr      TYPE saknr.
 
   " Read GL accounts from Table-3 (Installments)
   SELECT * FROM zfi_tax_sec42_gl_instl
-    WHERE bukrs = @p_bukrs
-    INTO TABLE @gt_gl_instl.
+    INTO TABLE gt_gl_instl
+    WHERE bukrs = p_bukrs.
 
   IF gt_gl_instl IS INITIAL.
     MESSAGE w007(zfi_sec42) WITH p_bukrs.
@@ -303,9 +309,9 @@ FORM process_surrendered_venture.
 
   " Check if amortization schedule already exists
   SELECT * FROM zfi_tax_sec42_amort_sch
-    WHERE venture = @p_jv
-      AND bukrs   = @p_bukrs
-    INTO TABLE @gt_amort_sch.
+    INTO TABLE gt_amort_sch
+    WHERE venture = p_jv
+      AND bukrs   = p_bukrs.
 
   " Check Date of Creation of schedule in Block Master
   IF gs_block_master-sched_date IS INITIAL.
@@ -315,9 +321,9 @@ FORM process_surrendered_venture.
 
       " Validate GL in SKB1
       SELECT SINGLE saknr FROM skb1
-        WHERE bukrs = @p_bukrs
-          AND saknr = @gs_gl_instl-hkont
-        INTO @DATA(lv_saknr).
+        INTO lv_saknr
+        WHERE bukrs = p_bukrs
+          AND saknr = gs_gl_instl-hkont.
       IF sy-subrc <> 0.
         CONTINUE.
       ENDIF.
@@ -381,12 +387,12 @@ FORM process_surrendered_venture.
 
   " Pick current year installment for deduction
   SELECT SINGLE * FROM zfi_tax_sec42_amort_sch_instl
-    WHERE venture  = @p_jv
-      AND bukrs    = @p_bukrs
-      AND gjahr    = @p_gjahr
+    INTO gs_amort_instl
+    WHERE venture  = p_jv
+      AND bukrs    = p_bukrs
+      AND gjahr    = p_gjahr
       AND executed = 'N'
-      AND reversed = 'N'
-    INTO @gs_amort_instl.
+      AND reversed = 'N'.
 
   IF sy-subrc = 0.
     " Store deduction
@@ -414,10 +420,12 @@ ENDFORM.
 *&---------------------------------------------------------------------*
 FORM process_active_venture.
 
+  DATA: lv_saknr TYPE saknr.
+
   " Read GL accounts from Table-2 (Post Commercial Production)
   SELECT * FROM zfi_tax_sec42_gl_post_comm
-    WHERE bukrs = @p_bukrs
-    INTO TABLE @gt_gl_post_comm.
+    INTO TABLE gt_gl_post_comm
+    WHERE bukrs = p_bukrs.
 
   IF gt_gl_post_comm IS INITIAL.
     RETURN.
@@ -427,9 +435,9 @@ FORM process_active_venture.
 
     " Validate GL in SKB1
     SELECT SINGLE saknr FROM skb1
-      WHERE bukrs = @p_bukrs
-        AND saknr = @gs_gl_post_comm-hkont
-      INTO @DATA(lv_saknr).
+      INTO lv_saknr
+      WHERE bukrs = p_bukrs
+        AND saknr = gs_gl_post_comm-hkont.
     IF sy-subrc <> 0.
       CONTINUE.
     ENDIF.
@@ -470,9 +478,9 @@ FORM process_reversal.
 
   " Read all installment entries for the venture/year
   SELECT * FROM zfi_tax_sec42_amort_sch_instl
-    WHERE venture = @p_jv
-      AND bukrs   = @p_bukrs
-    INTO TABLE @lt_amort_instl.
+    INTO TABLE lt_amort_instl
+    WHERE venture = p_jv
+      AND bukrs   = p_bukrs.
 
   IF lt_amort_instl IS INITIAL.
     MESSAGE s008(zfi_sec42) WITH p_jv.
@@ -489,9 +497,9 @@ FORM process_reversal.
 
   " Update Amortization Schedule - mark as reversed
   SELECT * FROM zfi_tax_sec42_amort_sch
-    WHERE venture = @p_jv
-      AND bukrs   = @p_bukrs
-    INTO TABLE @gt_amort_sch.
+    INTO TABLE gt_amort_sch
+    WHERE venture = p_jv
+      AND bukrs   = p_bukrs.
 
   LOOP AT gt_amort_sch INTO gs_amort_sch.
     gs_amort_sch-reversed = 'Y'.
@@ -507,7 +515,7 @@ ENDFORM.
 *& Form GET_GL_BALANCE
 *&---------------------------------------------------------------------*
 *& Read GL account balance (FAGLB03 equivalent)
-*& Uses ACDOCA / FAGLFLEXT for balance retrieval
+*& Uses FAGLFLEXT for balance retrieval (ECC 6.0 New GL)
 *&---------------------------------------------------------------------*
 FORM get_gl_balance
   USING    iv_venture  TYPE char10
@@ -517,24 +525,59 @@ FORM get_gl_balance
            iv_monat    TYPE monat
   CHANGING cv_balance  TYPE wrbtr.
 
-  DATA: lv_period_field TYPE string.
+  cv_balance = 0.
+
+  " Read from FAGLFLEXT (New GL totals table - ECC 6.0)
+  SELECT SUM( hsl01 ) SUM( hsl02 ) SUM( hsl03 )
+         SUM( hsl04 ) SUM( hsl05 ) SUM( hsl06 )
+         SUM( hsl07 ) SUM( hsl08 ) SUM( hsl09 )
+         SUM( hsl10 ) SUM( hsl11 ) SUM( hsl12 )
+    INTO (cv_balance, cv_balance, cv_balance,
+          cv_balance, cv_balance, cv_balance,
+          cv_balance, cv_balance, cv_balance,
+          cv_balance, cv_balance, cv_balance)
+    FROM faglflext
+    WHERE rbukrs = iv_bukrs
+      AND racct  = iv_hkont
+      AND gjahr  = iv_gjahr.
+
+* Note: The above reads individual period columns.
+* For cumulative balance up to a period, use the logic below:
+  DATA: lv_hsl01 TYPE wrbtr, lv_hsl02 TYPE wrbtr,
+        lv_hsl03 TYPE wrbtr, lv_hsl04 TYPE wrbtr,
+        lv_hsl05 TYPE wrbtr, lv_hsl06 TYPE wrbtr,
+        lv_hsl07 TYPE wrbtr, lv_hsl08 TYPE wrbtr,
+        lv_hsl09 TYPE wrbtr, lv_hsl10 TYPE wrbtr,
+        lv_hsl11 TYPE wrbtr, lv_hsl12 TYPE wrbtr.
 
   cv_balance = 0.
 
-  " Build period column name for FAGLFLEXT
-  CONCATENATE 'HSL' iv_monat INTO lv_period_field.
-  CONDENSE lv_period_field NO-GAPS.
-
-  " Read from FAGLFLEXT (New GL totals table)
-  SELECT SUM( hsl01 ) + SUM( hsl02 ) + SUM( hsl03 ) +
-         SUM( hsl04 ) + SUM( hsl05 ) + SUM( hsl06 ) +
-         SUM( hsl07 ) + SUM( hsl08 ) + SUM( hsl09 ) +
-         SUM( hsl10 ) + SUM( hsl11 ) + SUM( hsl12 )
+  SELECT SUM( hsl01 ) SUM( hsl02 ) SUM( hsl03 )
+         SUM( hsl04 ) SUM( hsl05 ) SUM( hsl06 )
+         SUM( hsl07 ) SUM( hsl08 ) SUM( hsl09 )
+         SUM( hsl10 ) SUM( hsl11 ) SUM( hsl12 )
+    INTO (lv_hsl01, lv_hsl02, lv_hsl03,
+          lv_hsl04, lv_hsl05, lv_hsl06,
+          lv_hsl07, lv_hsl08, lv_hsl09,
+          lv_hsl10, lv_hsl11, lv_hsl12)
     FROM faglflext
-    WHERE rbukrs = @iv_bukrs
-      AND racct  = @iv_hkont
-      AND gjahr  = @iv_gjahr
-    INTO @cv_balance.
+    WHERE rbukrs = iv_bukrs
+      AND racct  = iv_hkont
+      AND gjahr  = iv_gjahr.
+
+  " Sum up to the requested period
+  IF iv_monat >= '01'. cv_balance = cv_balance + lv_hsl01. ENDIF.
+  IF iv_monat >= '02'. cv_balance = cv_balance + lv_hsl02. ENDIF.
+  IF iv_monat >= '03'. cv_balance = cv_balance + lv_hsl03. ENDIF.
+  IF iv_monat >= '04'. cv_balance = cv_balance + lv_hsl04. ENDIF.
+  IF iv_monat >= '05'. cv_balance = cv_balance + lv_hsl05. ENDIF.
+  IF iv_monat >= '06'. cv_balance = cv_balance + lv_hsl06. ENDIF.
+  IF iv_monat >= '07'. cv_balance = cv_balance + lv_hsl07. ENDIF.
+  IF iv_monat >= '08'. cv_balance = cv_balance + lv_hsl08. ENDIF.
+  IF iv_monat >= '09'. cv_balance = cv_balance + lv_hsl09. ENDIF.
+  IF iv_monat >= '10'. cv_balance = cv_balance + lv_hsl10. ENDIF.
+  IF iv_monat >= '11'. cv_balance = cv_balance + lv_hsl11. ENDIF.
+  IF iv_monat >= '12'. cv_balance = cv_balance + lv_hsl12. ENDIF.
 
 ENDFORM.
 
@@ -556,13 +599,13 @@ FORM get_jv_total
 
   " Read JV transaction totals from JVTO1
   SELECT SUM( wrbtr )
+    INTO cv_total
     FROM jvto1
-    WHERE bukrs     = @iv_bukrs
-      AND venture   = @iv_venture
-      AND hkont     = @iv_hkont
-      AND gjahr     = @iv_gjahr
-      AND monat    <= @iv_monat
-    INTO @cv_total.
+    WHERE bukrs     = iv_bukrs
+      AND venture   = iv_venture
+      AND hkont     = iv_hkont
+      AND gjahr     = iv_gjahr
+      AND monat    <= iv_monat.
 
 ENDFORM.
 
