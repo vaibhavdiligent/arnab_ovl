@@ -528,21 +528,7 @@ FORM get_gl_balance
   cv_balance = 0.
 
   " Read from FAGLFLEXT (New GL totals table - ECC 6.0)
-  SELECT SUM( hsl01 ) SUM( hsl02 ) SUM( hsl03 )
-         SUM( hsl04 ) SUM( hsl05 ) SUM( hsl06 )
-         SUM( hsl07 ) SUM( hsl08 ) SUM( hsl09 )
-         SUM( hsl10 ) SUM( hsl11 ) SUM( hsl12 )
-    INTO (cv_balance, cv_balance, cv_balance,
-          cv_balance, cv_balance, cv_balance,
-          cv_balance, cv_balance, cv_balance,
-          cv_balance, cv_balance, cv_balance)
-    FROM faglflext
-    WHERE rbukrs = iv_bukrs
-      AND racct  = iv_hkont
-      AND gjahr  = iv_gjahr.
-
-* Note: The above reads individual period columns.
-* For cumulative balance up to a period, use the logic below:
+  " Sum period columns up to the requested period
   DATA: lv_hsl01 TYPE wrbtr, lv_hsl02 TYPE wrbtr,
         lv_hsl03 TYPE wrbtr, lv_hsl04 TYPE wrbtr,
         lv_hsl05 TYPE wrbtr, lv_hsl06 TYPE wrbtr,
