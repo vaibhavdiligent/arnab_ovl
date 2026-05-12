@@ -184,9 +184,10 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
-* ── 5. Create TADIR entry for the package ─────────────────────────────
-  " Note: lv_formname (TDSFNAME, char 30) must be widened to SOBJ_NAME
-  " (char 40) for TR_TADIR_INTERFACE.  Using a properly-typed local var.
+* ── 5. Clear any leftover "external editor" lock on the TADIR entry ────
+  " If a previous run set IV_SET_EDTFLAG='X' and then crashed, the form
+  " is now flagged as being edited externally, which blocks updates.
+  " Call TR_TADIR_INTERFACE again with IV_SET_EDTFLAG=' ' to release it.
   DATA lv_tadir_obj_name TYPE sobj_name.
   lv_tadir_obj_name = lv_formname.
 
@@ -198,14 +199,10 @@ START-OF-SELECTION.
       wi_tadir_obj_name = lv_tadir_obj_name
       wi_tadir_devclass = p_pkg
       wi_tadir_author   = sy-uname
-      iv_set_edtflag    = 'X'
+      iv_set_edtflag    = ' '   " <-- clear the external-editor lock
+      iv_delflag        = ' '
     EXCEPTIONS
-      OTHERS            = 1.
-
-  IF sy-subrc <> 0.
-    WRITE: / '[WARN] TADIR registration returned rc =', sy-subrc,
-             '(continuing anyway – store() will register it).'.
-  ENDIF.
+      OTHERS            = 0.    " ignore – form may not exist yet
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
