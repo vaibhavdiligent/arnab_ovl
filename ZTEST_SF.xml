@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SAP Smart Form: ZTEST_SF
+  Description  : Table Demo Smart Form (equivalent of Adobe Form ZTEST_SFP)
+  Interface    : ZTEST_SF (replaces Adobe Interface Z_TEZ_ADOBE_TEST)
+  Created      : 2017-04-27
+  Purpose      : Displays Sales Order header (VBELN) and line items
+                 (POSNR, MATNR, MATWA) fetched from table VBAP.
+
+  Adobe Form → Smart Form mapping
+  ─────────────────────────────────────────────────────────
+  Adobe Form (ZTEST_SFP)              Smart Form (ZTEST_SF)
+  Interface  Z_TEZ_ADOBE_TEST         Interface  ZTEST_SF
+  XFA/PDF layout (base-64 embed)      SAP native layout engine
+  Context node VBELN                  Form node  TEXT_VBELN
+  Context loop IT_VBAP / DATA         Table node TABLE_ITEMS (LOOP on IT_VBAP)
+  Fields: VBELN, POSNR, MATNR, MATWA Same fields via &WA_VBAP-<field>&
+  ─────────────────────────────────────────────────────────
+-->
+<asx:abap version="1.0" xmlns:asx="http://www.sap.com/abapxml">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 1 – FORM ADMINISTRATION
+       Corresponds to SAP internal table STXFADM
+       ═══════════════════════════════════════════════════════════ -->
+  <asx:values>
+
+    <FORMADMIN>
+      <STXFADM>
+        <FORMNAME>ZTEST_SF</FORMNAME>
+        <DESCRIPT>Table Demo Smart Form</DESCRIPT>
+        <AUTHOR>DEVELOPER</AUTHOR>
+        <CREATEDON>20170427</CREATEDON>
+        <LANGU>E</LANGU>
+        <DEVCLASS>$TMP</DEVCLASS>
+        <VERSNO>0001</VERSNO>
+        <STFUNC>ZTEST_SF</STFUNC>
+      </STXFADM>
+    </FORMADMIN>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 2 – INTERFACE
+         Mirrors ztest_sfp1.XML:
+           Import parameter : VBELN  TYPE VBELN
+           Global variable  : IT_VBAP TYPE TY_VBAP1
+           Type definitions : TY_VBAP, TY_VBAP1
+           Initialization   : SELECT … FROM VBAP … WHERE VBELN = VBELN
+         ═══════════════════════════════════════════════════════════ -->
+    <INTERFACE>
+
+      <!-- 2a. Import parameters -->
+      <IMPORT_PARAMETERS>
+        <SFPIOPAR>
+          <NAME>VBELN</NAME>
+          <TYPING>TYPE</TYPING>
+          <TYPENAME>VBELN</TYPENAME>
+          <OPTIONAL/>
+          <BYVALUE/>
+          <DEFAULTVAL/>
+          <STANDARD/>
+          <CONSTANT/>
+        </SFPIOPAR>
+      </IMPORT_PARAMETERS>
+
+      <!-- 2b. Export parameters (none in original) -->
+      <EXPORT_PARAMETERS/>
+
+      <!-- 2c. Global type definitions -->
+      <GLOBAL_TYPES>
+        <FPCLINE>TYPES: BEGIN OF TY_VBAP,</FPCLINE>
+        <FPCLINE>         VBELN  TYPE VBELN_VA,</FPCLINE>
+        <FPCLINE>         POSNR  TYPE POSNR_VA,</FPCLINE>
+        <FPCLINE>         MATNR  TYPE MATNR,</FPCLINE>
+        <FPCLINE>         MATWA  TYPE MATWA,</FPCLINE>
+        <FPCLINE>       END OF TY_VBAP.</FPCLINE>
+        <FPCLINE/>
+        <FPCLINE>TYPES: TY_VBAP1 TYPE TABLE OF TY_VBAP.</FPCLINE>
+      </GLOBAL_TYPES>
+
+      <!-- 2d. Global variables / internal tables -->
+      <GLOBAL_DATA>
+        <SFPGDATA>
+          <NAME>IT_VBAP</NAME>
+          <TYPING>TYPE</TYPING>
+          <TYPENAME>TY_VBAP1</TYPENAME>
+          <DEFAULTVAL/>
+          <CONSTANT/>
+        </SFPGDATA>
+        <!-- Work area used in the table loop body -->
+        <SFPGDATA>
+          <NAME>WA_VBAP</NAME>
+          <TYPING>TYPE</TYPING>
+          <TYPENAME>TY_VBAP</TYPENAME>
+          <DEFAULTVAL/>
+          <CONSTANT/>
+        </SFPGDATA>
+      </GLOBAL_DATA>
+
+      <!-- 2e. Initialization code (ABAP) – identical to Adobe Form -->
+      <INITIALIZATION>
+        <FPCLINE>SELECT VBELN</FPCLINE>
+        <FPCLINE>       POSNR</FPCLINE>
+        <FPCLINE>       MATNR</FPCLINE>
+        <FPCLINE>       MATWA</FPCLINE>
+        <FPCLINE>       FROM VBAP</FPCLINE>
+        <FPCLINE>       INTO TABLE IT_VBAP</FPCLINE>
+        <FPCLINE>       WHERE VBELN = VBELN.</FPCLINE>
+        <FPCLINE>IF SY-SUBRC = 0.</FPCLINE>
+        <FPCLINE/>
+        <FPCLINE>ENDIF.</FPCLINE>
+      </INITIALIZATION>
+
+    </INTERFACE>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 3 – STYLE (paragraph / character formats)
+         Default style attached to the form.
+         ═══════════════════════════════════════════════════════════ -->
+    <STYLE>
+      <STYLENAME>ZTEST_SF_STYLE</STYLENAME>
+      <PARAGRAPHS>
+
+        <!-- Paragraph format: header label -->
+        <SFPARAGRAPH>
+          <NAME>HEADER</NAME>
+          <DESCRIPT>Page / section header</DESCRIPT>
+          <FONTNAME>Arial</FONTNAME>
+          <FONTSIZE>10</FONTSIZE>
+          <BOLD>X</BOLD>
+          <ALIGN>L</ALIGN>
+          <SPACBEF>2</SPACBEF>
+          <SPACAFT>2</SPACAFT>
+        </SFPARAGRAPH>
+
+        <!-- Paragraph format: table column header -->
+        <SFPARAGRAPH>
+          <NAME>COL_HDR</NAME>
+          <DESCRIPT>Table column header</DESCRIPT>
+          <FONTNAME>Arial</FONTNAME>
+          <FONTSIZE>9</FONTSIZE>
+          <BOLD>X</BOLD>
+          <ALIGN>L</ALIGN>
+          <SPACBEF>1</SPACBEF>
+          <SPACAFT>1</SPACAFT>
+        </SFPARAGRAPH>
+
+        <!-- Paragraph format: table data row -->
+        <SFPARAGRAPH>
+          <NAME>TABLE_BODY</NAME>
+          <DESCRIPT>Table body / data row</DESCRIPT>
+          <FONTNAME>Arial</FONTNAME>
+          <FONTSIZE>9</FONTSIZE>
+          <BOLD/>
+          <ALIGN>L</ALIGN>
+          <SPACBEF>1</SPACBEF>
+          <SPACAFT>1</SPACAFT>
+        </SFPARAGRAPH>
+
+        <!-- Default paragraph -->
+        <SFPARAGRAPH>
+          <NAME>DEFAULT</NAME>
+          <DESCRIPT>Default paragraph</DESCRIPT>
+          <FONTNAME>Arial</FONTNAME>
+          <FONTSIZE>10</FONTSIZE>
+          <BOLD/>
+          <ALIGN>L</ALIGN>
+        </SFPARAGRAPH>
+
+      </PARAGRAPHS>
+    </STYLE>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SECTION 4 – FORM PAGES
+         PAGE1: Letter paper (8.5 in × 11 in), portrait
+                Content area mirrors Adobe Form (8 in × 10.5 in,
+                offset 0.25 in / 0.25 in).
+         ═══════════════════════════════════════════════════════════ -->
+    <PAGES>
+
+      <SFPAGE>
+        <NAME>PAGE1</NAME>
+        <DESCRIPT>Page 1</DESCRIPT>
+        <PAPFORMAT>LETTER</PAPFORMAT>
+        <PAPWIDTH>215.9</PAPWIDTH>   <!-- mm: 8.5 in -->
+        <PAPLENGTH>279.4</PAPLENGTH> <!-- mm: 11 in  -->
+        <PAPLANDSC/>                 <!-- portrait   -->
+        <LEFMARGIN>6.35</LEFMARGIN>  <!-- mm: 0.25 in -->
+        <RITMARGIN>6.35</RITMARGIN>
+        <TOPMARGIN>6.35</TOPMARGIN>
+        <BOTMARGIN>6.35</BOTMARGIN>
+        <NEXPAGE/>                   <!-- no next page defined -->
+        <PAGNUMBER>1</PAGNUMBER>
+
+        <!-- ── Windows on this page ── -->
+        <WINDOWS>
+
+          <!-- MAIN window (output area matching Adobe Form content area) -->
+          <SFWINDOW>
+            <NAME>MAIN</NAME>
+            <WINTYPE>MAIN</WINTYPE>
+            <DESCRIPT>Main output window</DESCRIPT>
+            <LEFT>6.35</LEFT>     <!-- mm -->
+            <TOP>6.35</TOP>       <!-- mm -->
+            <WIDTH>203.2</WIDTH>  <!-- mm: 8 in  -->
+            <HEIGHT>266.7</HEIGHT><!-- mm: 10.5 in -->
+
+            <!-- ── Flow nodes inside MAIN window ── -->
+            <NODES>
+
+              <!-- ────────────────────────────────────────────────
+                   NODE 1: TEXT_VBELN
+                   Displays the Sales Document header field.
+                   Mirrors the Adobe Form field "VBELN" at the
+                   top of the subform (y ≈ 85.725 mm,
+                   caption "Sales Document").
+                   ──────────────────────────────────────────────── -->
+              <SFNODE>
+                <NODETYPE>TEXT</NODETYPE>
+                <NAME>TEXT_VBELN</NAME>
+                <DESCRIPT>Sales Document header field</DESCRIPT>
+                <ACTIVE>X</ACTIVE>
+                <PARAFORMAT>HEADER</PARAFORMAT>
+                <TEXTCONTENT>
+                  <LINE>
+                    <TEXT>Sales Document: </TEXT>
+                  </LINE>
+                  <LINE>
+                    <!-- Field symbol: inserts value of import parameter VBELN -->
+                    <FIELD>
+                      <FIELDNAME>VBELN</FIELDNAME>
+                      <MAXCHARS>10</MAXCHARS>
+                    </FIELD>
+                  </LINE>
+                </TEXTCONTENT>
+              </SFNODE>
+
+              <!-- ────────────────────────────────────────────────
+                   NODE 2: TABLE_ITEMS
+                   Tabular output of IT_VBAP line items.
+                   Mirrors the Adobe Form subform "BodyRow"
+                   (bound to IT_VBAP) containing BODY subform
+                   (bound to DATA[*]) with fields:
+                     VBELN (62 mm), POSNR (62 mm),
+                     MATNR (62 mm), MATWA (62 mm).
+                   ──────────────────────────────────────────────── -->
+              <SFNODE>
+                <NODETYPE>TABLE</NODETYPE>
+                <NAME>TABLE_ITEMS</NAME>
+                <DESCRIPT>Sales Order Line Items</DESCRIPT>
+                <ACTIVE>X</ACTIVE>
+
+                <!-- Data binding: loop over IT_VBAP,
+                     work area WA_VBAP (declared in GLOBAL_DATA) -->
+                <TABLEDATA>
+                  <ITAB>IT_VBAP</ITAB>
+                  <WAREA>WA_VBAP</WAREA>
+                  <SORTBY/>
+                  <FIRSTLINE>0</FIRSTLINE>
+                  <LASTLINE>0</LASTLINE>
+                </TABLEDATA>
+
+                <!-- ── Column definitions (widths match Adobe Form) ── -->
+                <COLUMNS>
+
+                  <SFCOLUMN>
+                    <NAME>COL_VBELN</NAME>
+                    <WIDTH>62</WIDTH>  <!-- mm -->
+                    <DESCRIPT>Sales Document</DESCRIPT>
+                  </SFCOLUMN>
+
+                  <SFCOLUMN>
+                    <NAME>COL_POSNR</NAME>
+                    <WIDTH>62</WIDTH>
+                    <DESCRIPT>Item Number</DESCRIPT>
+                  </SFCOLUMN>
+
+                  <SFCOLUMN>
+                    <NAME>COL_MATNR</NAME>
+                    <WIDTH>62</WIDTH>
+                    <DESCRIPT>Material Number</DESCRIPT>
+                  </SFCOLUMN>
+
+                  <SFCOLUMN>
+                    <NAME>COL_MATWA</NAME>
+                    <WIDTH>62</WIDTH>
+                    <DESCRIPT>Material Entered</DESCRIPT>
+                  </SFCOLUMN>
+
+                </COLUMNS>
+
+                <!-- ── Table header row (column captions) ── -->
+                <TABLE_HEADER>
+                  <NAME>TBL_HDR</NAME>
+                  <DESCRIPT>Column header row</DESCRIPT>
+                  <ACTIVE>X</ACTIVE>
+                  <CELLS>
+
+                    <SFCELL>
+                      <COLUMN>COL_VBELN</COLUMN>
+                      <PARAFORMAT>COL_HDR</PARAFORMAT>
+                      <TEXT>Sales Doc</TEXT>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_POSNR</COLUMN>
+                      <PARAFORMAT>COL_HDR</PARAFORMAT>
+                      <TEXT>Item</TEXT>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_MATNR</COLUMN>
+                      <PARAFORMAT>COL_HDR</PARAFORMAT>
+                      <TEXT>Material Number</TEXT>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_MATWA</COLUMN>
+                      <PARAFORMAT>COL_HDR</PARAFORMAT>
+                      <TEXT>Material Entered</TEXT>
+                    </SFCELL>
+
+                  </CELLS>
+                </TABLE_HEADER>
+
+                <!-- ── Table body / data row ── -->
+                <TABLE_BODY>
+                  <NAME>TBL_BODY</NAME>
+                  <DESCRIPT>Data row (one per IT_VBAP line)</DESCRIPT>
+                  <ACTIVE>X</ACTIVE>
+                  <CELLS>
+
+                    <SFCELL>
+                      <COLUMN>COL_VBELN</COLUMN>
+                      <PARAFORMAT>TABLE_BODY</PARAFORMAT>
+                      <!-- Field reference: WA_VBAP-VBELN, max 10 chars -->
+                      <FIELD>
+                        <FIELDNAME>WA_VBAP-VBELN</FIELDNAME>
+                        <MAXCHARS>10</MAXCHARS>
+                      </FIELD>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_POSNR</COLUMN>
+                      <PARAFORMAT>TABLE_BODY</PARAFORMAT>
+                      <!-- Field reference: WA_VBAP-POSNR, max 6 chars -->
+                      <FIELD>
+                        <FIELDNAME>WA_VBAP-POSNR</FIELDNAME>
+                        <MAXCHARS>6</MAXCHARS>
+                      </FIELD>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_MATNR</COLUMN>
+                      <PARAFORMAT>TABLE_BODY</PARAFORMAT>
+                      <!-- Field reference: WA_VBAP-MATNR, max 18 chars -->
+                      <FIELD>
+                        <FIELDNAME>WA_VBAP-MATNR</FIELDNAME>
+                        <MAXCHARS>18</MAXCHARS>
+                      </FIELD>
+                    </SFCELL>
+
+                    <SFCELL>
+                      <COLUMN>COL_MATWA</COLUMN>
+                      <PARAFORMAT>TABLE_BODY</PARAFORMAT>
+                      <!-- Field reference: WA_VBAP-MATWA, max 18 chars -->
+                      <FIELD>
+                        <FIELDNAME>WA_VBAP-MATWA</FIELDNAME>
+                        <MAXCHARS>18</MAXCHARS>
+                      </FIELD>
+                    </SFCELL>
+
+                  </CELLS>
+                </TABLE_BODY>
+
+                <!-- ── Overflow: continue on same page area ── -->
+                <OVERFLOW>
+                  <TARGETPAGE>PAGE1</TARGETPAGE>
+                  <TARGETWIN>MAIN</TARGETWIN>
+                </OVERFLOW>
+
+              </SFNODE>
+              <!-- end TABLE_ITEMS -->
+
+            </NODES>
+            <!-- end MAIN window nodes -->
+
+          </SFWINDOW>
+          <!-- end MAIN -->
+
+        </WINDOWS>
+        <!-- end PAGE1 windows -->
+
+      </SFPAGE>
+      <!-- end PAGE1 -->
+
+    </PAGES>
+
+  </asx:values>
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 5 – HEAP  (object references, conditions)
+       Mirrors the heap section of the Adobe Form XMLs.
+       ═══════════════════════════════════════════════════════════ -->
+  <asx:heap
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns:abap="http://www.sap.com/abapxml/types/built-in"
+      xmlns:cls="http://www.sap.com/abapxml/classes/global"
+      xmlns:dic="http://www.sap.com/abapxml/types/dictionary">
+
+    <!-- Smart Form interface object -->
+    <cls:CL_SSF_FB_SMART_FORM_INTERFACE id="o01">
+      <CL_SSF_FB_SMART_FORM_INTERFACE classVersion="1">
+        <FORMNAME>ZTEST_SF</FORMNAME>
+        <IMPORT_PARAMS>
+          <SFPIOPAR>
+            <NAME>VBELN</NAME>
+            <TYPING>TYPE</TYPING>
+            <TYPENAME>VBELN</TYPENAME>
+          </SFPIOPAR>
+        </IMPORT_PARAMS>
+      </CL_SSF_FB_SMART_FORM_INTERFACE>
+    </cls:CL_SSF_FB_SMART_FORM_INTERFACE>
+
+    <!-- Global definitions object -->
+    <cls:CL_SSF_FB_SMART_FORM_GLOBALS id="o02">
+      <CL_SSF_FB_SMART_FORM_GLOBALS classVersion="1">
+        <GLOBAL_DATA>
+          <SFPGDATA>
+            <NAME>IT_VBAP</NAME>
+            <TYPING>TYPE</TYPING>
+            <TYPENAME>TY_VBAP1</TYPENAME>
+          </SFPGDATA>
+          <SFPGDATA>
+            <NAME>WA_VBAP</NAME>
+            <TYPING>TYPE</TYPING>
+            <TYPENAME>TY_VBAP</TYPENAME>
+          </SFPGDATA>
+        </GLOBAL_DATA>
+        <TYPES>
+          <FPCLINE>TYPES: BEGIN OF TY_VBAP,</FPCLINE>
+          <FPCLINE>         VBELN  TYPE VBELN_VA,</FPCLINE>
+          <FPCLINE>         POSNR  TYPE POSNR_VA,</FPCLINE>
+          <FPCLINE>         MATNR  TYPE MATNR,</FPCLINE>
+          <FPCLINE>         MATWA  TYPE MATWA,</FPCLINE>
+          <FPCLINE>       END OF TY_VBAP.</FPCLINE>
+          <FPCLINE>TYPES: TY_VBAP1 TYPE TABLE OF TY_VBAP.</FPCLINE>
+        </TYPES>
+        <INITIALIZATION>
+          <FPCLINE>SELECT VBELN POSNR MATNR MATWA</FPCLINE>
+          <FPCLINE>       FROM VBAP</FPCLINE>
+          <FPCLINE>       INTO TABLE IT_VBAP</FPCLINE>
+          <FPCLINE>       WHERE VBELN = VBELN.</FPCLINE>
+          <FPCLINE>IF SY-SUBRC = 0.</FPCLINE>
+          <FPCLINE>ENDIF.</FPCLINE>
+        </INITIALIZATION>
+      </CL_SSF_FB_SMART_FORM_GLOBALS>
+    </cls:CL_SSF_FB_SMART_FORM_GLOBALS>
+
+    <!-- Page node -->
+    <cls:CL_SSF_FB_PAGE id="o03">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>PAGE1_NODE_001</ID>
+        <NAME>PAGE1</NAME>
+        <STATE>A</STATE>
+        <PARENT/>
+        <SUCCESSOR/>
+        <CHILD href="#o04"/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_PAGE classVersion="1">
+        <PAPFORMAT>LETTER</PAPFORMAT>
+        <PAPWIDTH>215.9</PAPWIDTH>
+        <PAPLENGTH>279.4</PAPLENGTH>
+        <NEXPAGE/>
+      </CL_SSF_FB_PAGE>
+    </cls:CL_SSF_FB_PAGE>
+
+    <!-- Main window node -->
+    <cls:CL_SSF_FB_WINDOW id="o04">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>MAIN_WIN_NODE_001</ID>
+        <NAME>MAIN</NAME>
+        <STATE>A</STATE>
+        <CONDITION href="#o05"/>
+        <PARENT href="#o03"/>
+        <SUCCESSOR/>
+        <CHILD href="#o06"/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_WINDOW classVersion="1">
+        <WINTYPE>MAIN</WINTYPE>
+        <LEFT>6.35</LEFT>
+        <TOP>6.35</TOP>
+        <WIDTH>203.2</WIDTH>
+        <HEIGHT>266.7</HEIGHT>
+      </CL_SSF_FB_WINDOW>
+    </cls:CL_SSF_FB_WINDOW>
+
+    <!-- Condition for MAIN window (always active) -->
+    <cls:CL_SSF_FB_CONDITION id="o05">
+      <CL_SSF_FB_CONDITION classVersion="1">
+        <NODE href="#o04"/>
+        <CONDITIONS/>
+      </CL_SSF_FB_CONDITION>
+    </cls:CL_SSF_FB_CONDITION>
+
+    <!-- Text node: Sales Document header -->
+    <cls:CL_SSF_FB_TEXT id="o06">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>TEXT_VBELN_NODE_001</ID>
+        <NAME>TEXT_VBELN</NAME>
+        <STATE>A</STATE>
+        <CONDITION href="#o07"/>
+        <PARENT href="#o04"/>
+        <SUCCESSOR href="#o08"/>
+        <CHILD/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_TEXT classVersion="1">
+        <PARAFORMAT>HEADER</PARAFORMAT>
+        <FIELD>VBELN</FIELD>
+        <FIELD_LABEL>Sales Document</FIELD_LABEL>
+      </CL_SSF_FB_TEXT>
+    </cls:CL_SSF_FB_TEXT>
+
+    <!-- Condition for TEXT_VBELN (always active) -->
+    <cls:CL_SSF_FB_CONDITION id="o07">
+      <CL_SSF_FB_CONDITION classVersion="1">
+        <NODE href="#o06"/>
+        <CONDITIONS/>
+      </CL_SSF_FB_CONDITION>
+    </cls:CL_SSF_FB_CONDITION>
+
+    <!-- Table node: IT_VBAP line items -->
+    <cls:CL_SSF_FB_TABLE id="o08">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>TABLE_ITEMS_NODE_001</ID>
+        <NAME>TABLE_ITEMS</NAME>
+        <STATE>A</STATE>
+        <CONDITION href="#o09"/>
+        <PARENT href="#o04"/>
+        <SUCCESSOR/>
+        <CHILD href="#o10"/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_TABLE classVersion="1">
+        <ITAB>IT_VBAP</ITAB>
+        <WAREA>WA_VBAP</WAREA>
+      </CL_SSF_FB_TABLE>
+    </cls:CL_SSF_FB_TABLE>
+
+    <!-- Condition for TABLE_ITEMS (always active) -->
+    <cls:CL_SSF_FB_CONDITION id="o09">
+      <CL_SSF_FB_CONDITION classVersion="1">
+        <NODE href="#o08"/>
+        <CONDITIONS/>
+      </CL_SSF_FB_CONDITION>
+    </cls:CL_SSF_FB_CONDITION>
+
+    <!-- Table header row node -->
+    <cls:CL_SSF_FB_TABLE_ROW id="o10">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>TBL_HDR_NODE_001</ID>
+        <NAME>TBL_HDR</NAME>
+        <STATE>A</STATE>
+        <CONDITION href="#o11"/>
+        <PARENT href="#o08"/>
+        <SUCCESSOR href="#o12"/>
+        <CHILD/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_TABLE_ROW classVersion="1">
+        <ROWTYPE>HEADER</ROWTYPE>
+        <CELLS>
+          <SFCELL><COLUMN>COL_VBELN</COLUMN><TEXT>Sales Doc</TEXT></SFCELL>
+          <SFCELL><COLUMN>COL_POSNR</COLUMN><TEXT>Item</TEXT></SFCELL>
+          <SFCELL><COLUMN>COL_MATNR</COLUMN><TEXT>Material Number</TEXT></SFCELL>
+          <SFCELL><COLUMN>COL_MATWA</COLUMN><TEXT>Material Entered</TEXT></SFCELL>
+        </CELLS>
+      </CL_SSF_FB_TABLE_ROW>
+    </cls:CL_SSF_FB_TABLE_ROW>
+
+    <!-- Condition for TBL_HDR (always active) -->
+    <cls:CL_SSF_FB_CONDITION id="o11">
+      <CL_SSF_FB_CONDITION classVersion="1">
+        <NODE href="#o10"/>
+        <CONDITIONS/>
+      </CL_SSF_FB_CONDITION>
+    </cls:CL_SSF_FB_CONDITION>
+
+    <!-- Table body row node (repeats for each IT_VBAP entry) -->
+    <cls:CL_SSF_FB_TABLE_ROW id="o12">
+      <CL_SSF_FB_NODE classVersion="1">
+        <ID>TBL_BODY_NODE_001</ID>
+        <NAME>TBL_BODY</NAME>
+        <STATE>A</STATE>
+        <CONDITION href="#o13"/>
+        <PARENT href="#o08"/>
+        <SUCCESSOR/>
+        <CHILD/>
+      </CL_SSF_FB_NODE>
+      <CL_SSF_FB_TABLE_ROW classVersion="1">
+        <ROWTYPE>BODY</ROWTYPE>
+        <CELLS>
+          <SFCELL>
+            <COLUMN>COL_VBELN</COLUMN>
+            <FIELD><FIELDNAME>WA_VBAP-VBELN</FIELDNAME><MAXCHARS>10</MAXCHARS></FIELD>
+          </SFCELL>
+          <SFCELL>
+            <COLUMN>COL_POSNR</COLUMN>
+            <FIELD><FIELDNAME>WA_VBAP-POSNR</FIELDNAME><MAXCHARS>6</MAXCHARS></FIELD>
+          </SFCELL>
+          <SFCELL>
+            <COLUMN>COL_MATNR</COLUMN>
+            <FIELD><FIELDNAME>WA_VBAP-MATNR</FIELDNAME><MAXCHARS>18</MAXCHARS></FIELD>
+          </SFCELL>
+          <SFCELL>
+            <COLUMN>COL_MATWA</COLUMN>
+            <FIELD><FIELDNAME>WA_VBAP-MATWA</FIELDNAME><MAXCHARS>18</MAXCHARS></FIELD>
+          </SFCELL>
+        </CELLS>
+      </CL_SSF_FB_TABLE_ROW>
+    </cls:CL_SSF_FB_TABLE_ROW>
+
+    <!-- Condition for TBL_BODY (always active) -->
+    <cls:CL_SSF_FB_CONDITION id="o13">
+      <CL_SSF_FB_CONDITION classVersion="1">
+        <NODE href="#o12"/>
+        <CONDITIONS/>
+      </CL_SSF_FB_CONDITION>
+    </cls:CL_SSF_FB_CONDITION>
+
+  </asx:heap>
+
+</asx:abap>
