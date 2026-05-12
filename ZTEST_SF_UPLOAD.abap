@@ -185,12 +185,17 @@ START-OF-SELECTION.
   WRITE: / 'Form name from XML:', lv_formname.
 
 * ── 5. Create TADIR entry for the package ─────────────────────────────
+  " Note: lv_formname (TDSFNAME, char 30) must be widened to SOBJ_NAME
+  " (char 40) for TR_TADIR_INTERFACE.  Using a properly-typed local var.
+  DATA lv_tadir_obj_name TYPE sobj_name.
+  lv_tadir_obj_name = lv_formname.
+
   CALL FUNCTION 'TR_TADIR_INTERFACE'
     EXPORTING
-      wi_test_modus    = abap_false
-      wi_tadir_pgmid   = 'R3TR'
-      wi_tadir_object  = 'SSFO'
-      wi_tadir_obj_name = lv_formname
+      wi_test_modus     = abap_false
+      wi_tadir_pgmid    = 'R3TR'
+      wi_tadir_object   = 'SSFO'
+      wi_tadir_obj_name = lv_tadir_obj_name
       wi_tadir_devclass = p_pkg
       wi_tadir_author   = sy-uname
       iv_set_edtflag    = 'X'
@@ -199,7 +204,7 @@ START-OF-SELECTION.
 
   IF sy-subrc <> 0.
     WRITE: / '[WARN] TADIR registration returned rc =', sy-subrc,
-             '(continuing anyway).'.
+             '(continuing anyway – store() will register it).'.
   ENDIF.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
