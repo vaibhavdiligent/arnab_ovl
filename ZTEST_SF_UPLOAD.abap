@@ -184,25 +184,30 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
-* ── 5. Clear any leftover "external editor" lock on the TADIR entry ────
-  " If a previous run set IV_SET_EDTFLAG='X' and then crashed, the form
-  " is now flagged as being edited externally, which blocks updates.
-  " Call TR_TADIR_INTERFACE again with IV_SET_EDTFLAG=' ' to release it.
-  DATA lv_tadir_obj_name TYPE sobj_name.
+* ── 5. Clear leftover EDTFLAG / DELFLAG on the TADIR entry ─────────────
+  " A previous broken run with IV_SET_EDTFLAG='X' persisted EDTFLAG='X'
+  " in TADIR.  TR_TADIR_INTERFACE with IV_SET_EDTFLAG=' ' does NOT
+  " reliably unset that flag — only direct UPDATE does.  Without this,
+  " every subsequent upload raises:
+  "   "You cannot edit object R3TR SSFO ZTEST_SF with the standard editor"
+  DATA: lv_tadir_obj_name TYPE sobj_name,
+        ls_tadir          TYPE tadir.
   lv_tadir_obj_name = lv_formname.
 
-  CALL FUNCTION 'TR_TADIR_INTERFACE'
-    EXPORTING
-      wi_test_modus     = abap_false
-      wi_tadir_pgmid    = 'R3TR'
-      wi_tadir_object   = 'SSFO'
-      wi_tadir_obj_name = lv_tadir_obj_name
-      wi_tadir_devclass = p_pkg
-      wi_tadir_author   = sy-uname
-      iv_set_edtflag    = ' '   " <-- clear the external-editor lock
-      iv_delflag        = ' '
-    EXCEPTIONS
-      OTHERS            = 0.    " ignore – form may not exist yet
+  SELECT SINGLE * FROM tadir INTO ls_tadir
+    WHERE pgmid    = 'R3TR'
+      AND object   = 'SSFO'
+      AND obj_name = lv_tadir_obj_name.
+
+  IF sy-subrc = 0 AND ( ls_tadir-edtflag = 'X' OR ls_tadir-delflag = 'X' ).
+    UPDATE tadir SET edtflag = ' '
+                     delflag = ' '
+      WHERE pgmid    = 'R3TR'
+        AND object   = 'SSFO'
+        AND obj_name = lv_tadir_obj_name.
+    COMMIT WORK.
+    WRITE: / 'Cleared stale EDTFLAG/DELFLAG on TADIR entry for', lv_formname.
+  ENDIF.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
