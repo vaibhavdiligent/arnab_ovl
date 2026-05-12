@@ -144,14 +144,14 @@ FORM f_build_global_defs.
   " ── TYPE definitions ───────────────────────────────────────────────
   CLEAR ls_codeline.
 
-  ls_codeline-line = 'TYPES: BEGIN OF ty_vbap,'.                     APPEND ls_codeline TO lt_types_code.
-  ls_codeline-line = '         vbeln  TYPE vbeln_va,'.                APPEND ls_codeline TO lt_types_code.
-  ls_codeline-line = '         posnr  TYPE posnr_va,'.                APPEND ls_codeline TO lt_types_code.
-  ls_codeline-line = '         matnr  TYPE matnr,'.                   APPEND ls_codeline TO lt_types_code.
-  ls_codeline-line = '         matwa  TYPE matwa,'.                   APPEND ls_codeline TO lt_types_code.
-  ls_codeline-line = '       END OF ty_vbap.'.                        APPEND ls_codeline TO lt_types_code.
+  ls_codeline = 'TYPES: BEGIN OF ty_vbap,'.                     APPEND ls_codeline TO lt_types_code.
+  ls_codeline = '         vbeln  TYPE vbeln_va,'.                APPEND ls_codeline TO lt_types_code.
+  ls_codeline = '         posnr  TYPE posnr_va,'.                APPEND ls_codeline TO lt_types_code.
+  ls_codeline = '         matnr  TYPE matnr,'.                   APPEND ls_codeline TO lt_types_code.
+  ls_codeline = '         matwa  TYPE matwa,'.                   APPEND ls_codeline TO lt_types_code.
+  ls_codeline = '       END OF ty_vbap.'.                        APPEND ls_codeline TO lt_types_code.
   CLEAR ls_codeline.
-  ls_codeline-line = 'TYPES: ty_vbap1 TYPE TABLE OF ty_vbap.'.        APPEND ls_codeline TO lt_types_code.
+  ls_codeline = 'TYPES: ty_vbap1 TYPE TABLE OF ty_vbap.'.        APPEND ls_codeline TO lt_types_code.
 
   " ── Global variable declarations ───────────────────────────────────
   " Internal table IT_VBAP
@@ -170,12 +170,12 @@ FORM f_build_global_defs.
 
   " ── Initialization code ────────────────────────────────────────────
   CLEAR ls_codeline.
-  ls_codeline-line = 'SELECT vbeln posnr matnr matwa'. APPEND ls_codeline TO lt_init_code.
-  ls_codeline-line = '  FROM vbap'.                    APPEND ls_codeline TO lt_init_code.
-  ls_codeline-line = '  INTO TABLE it_vbap'.           APPEND ls_codeline TO lt_init_code.
-  ls_codeline-line = '  WHERE vbeln = vbeln.'.         APPEND ls_codeline TO lt_init_code.
-  ls_codeline-line = 'IF sy-subrc = 0.'.               APPEND ls_codeline TO lt_init_code.
-  ls_codeline-line = 'ENDIF.'.                         APPEND ls_codeline TO lt_init_code.
+  ls_codeline = 'SELECT vbeln posnr matnr matwa'. APPEND ls_codeline TO lt_init_code.
+  ls_codeline = '  FROM vbap'.                    APPEND ls_codeline TO lt_init_code.
+  ls_codeline = '  INTO TABLE it_vbap'.           APPEND ls_codeline TO lt_init_code.
+  ls_codeline = '  WHERE vbeln = vbeln.'.         APPEND ls_codeline TO lt_init_code.
+  ls_codeline = 'IF sy-subrc = 0.'.               APPEND ls_codeline TO lt_init_code.
+  ls_codeline = 'ENDIF.'.                         APPEND ls_codeline TO lt_init_code.
 
   WRITE: / 'Global definitions built: TY_VBAP, TY_VBAP1, IT_VBAP, WA_VBAP + init code'.
 
