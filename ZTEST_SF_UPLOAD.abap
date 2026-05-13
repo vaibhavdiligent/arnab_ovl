@@ -231,39 +231,46 @@ START-OF-SELECTION.
 *   removes the form across ALL Smart Forms tables (STXFADM, STXFOBJ,
 *   text tables, etc.) — direct SQL on STXFADM alone leaves orphan
 *   node rows that cause the next upload to produce duplicate nodes.
-  DATA: lv_tadir_obj_name TYPE sobj_name,
-        lv_form_check     TYPE stxfadm-formname.
+  DATA: lv_tadir_obj_name TYPE sobj_name.
   lv_tadir_obj_name = lv_formname.
 
-  SELECT SINGLE formname FROM stxfadm INTO lv_form_check
-    WHERE formname = lv_formname.
-
+  " Always call FB_DELETE_FORM, even if STXFADM has no row.  Reason:
+  " STXFADM may be empty (e.g. an aborted upload removed the admin row)
+  " while STXFOBJ / STXFOBJT still contain orphan node rows from a
+  " previous upload.  Those orphans would survive INSERT mode and
+  " corrupt the new form.  FB_DELETE_FORM with no_form swallowed is
+  " safe to call unconditionally.
+  WRITE: / 'Calling FB_DELETE_FORM unconditionally to wipe any leftover STXFOBJ rows.'.
+  CALL FUNCTION 'FB_DELETE_FORM'
+    EXPORTING
+      i_formname            = lv_formname
+      i_with_dialog         = abap_false
+      i_with_confirm_dialog = abap_false
+    EXCEPTIONS
+      no_form               = 1
+      OTHERS                = 2.
   IF sy-subrc = 0.
-    WRITE: / 'Form', lv_formname, 'already exists – deleting via FB_DELETE_FORM.'.
-    CALL FUNCTION 'FB_DELETE_FORM'
-      EXPORTING
-        i_formname            = lv_formname
-        i_with_dialog         = abap_false
-        i_with_confirm_dialog = abap_false
-      EXCEPTIONS
-        no_form               = 1
-        OTHERS                = 2.
-    IF sy-subrc = 0.
-      WRITE: / '  FB_DELETE_FORM succeeded.'.
-    ELSE.
-      WRITE: / '  FB_DELETE_FORM returned sy-subrc =', sy-subrc,
-               '– falling back to direct table cleanup.'.
-      DELETE FROM stxfadm WHERE formname = lv_formname.
-    ENDIF.
-    " Always also clear the TADIR entry so INSERT mode is unambiguous
-    DELETE FROM tadir
-      WHERE pgmid    = 'R3TR'
-        AND object   = 'SSFO'
-        AND obj_name = lv_tadir_obj_name.
-    COMMIT WORK.
+    WRITE: / '  FB_DELETE_FORM succeeded.'.
+  ELSEIF sy-subrc = 1.
+    WRITE: / '  FB_DELETE_FORM: no_form (nothing to delete).'.
   ELSE.
-    WRITE: / 'No existing form – proceeding directly to INSERT.'.
+    WRITE: / '  FB_DELETE_FORM returned sy-subrc =', sy-subrc.
   ENDIF.
+
+  " Belt-and-braces: also wipe the Smart Form storage tables directly.
+  " FB_DELETE_FORM normally clears these, but if it raised no_form
+  " because STXFADM was empty, the orphan STXFOBJ rows would still be
+  " there.  Direct DELETE guarantees a clean slate.
+  DELETE FROM stxfadm  WHERE formname = lv_formname.
+  DELETE FROM stxfobj  WHERE formname = lv_formname.
+  DELETE FROM stxfobjt WHERE formname = lv_formname.
+  DELETE FROM stxftxt  WHERE formname = lv_formname.
+  DELETE FROM tadir
+    WHERE pgmid    = 'R3TR'
+      AND object   = 'SSFO'
+      AND obj_name = lv_tadir_obj_name.
+  COMMIT WORK.
+  WRITE: / 'Direct table cleanup of STXFADM/STXFOBJ/STXFOBJT/STXFTXT/TADIR done.'.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
