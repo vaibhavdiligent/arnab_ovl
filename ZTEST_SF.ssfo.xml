@@ -149,6 +149,15 @@
     <STANDARD>X</STANDARD>
    </item>
   </INTERFACE>
+  <TYPES>
+   <item>TYPES: BEGIN OF ty_vbap,</item>
+   <item>         vbeln TYPE vbeln_va,</item>
+   <item>         posnr TYPE posnr_va,</item>
+   <item>         matnr TYPE matnr,</item>
+   <item>         matwa TYPE matwa,</item>
+   <item>       END OF ty_vbap.</item>
+   <item>TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.</item>
+  </TYPES>
   <GDATA>
    <item>
     <NAME>IT_VBAP</NAME>
@@ -241,12 +250,6 @@
                       </item>
                      </PLIST>
                      <CODE>
-                      <item>TYPES: BEGIN OF ty_vbap,</item>
-                      <item>         vbeln TYPE vbeln_va,</item>
-                      <item>         posnr TYPE posnr_va,</item>
-                      <item>         matnr TYPE matnr,</item>
-                      <item>         matwa TYPE matwa,</item>
-                      <item>       END OF ty_vbap.</item>
                       <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
                       <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
                      </CODE>
