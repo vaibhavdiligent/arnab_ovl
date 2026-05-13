@@ -146,7 +146,7 @@ START-OF-SELECTION.
     RETURN.
   ENDIF.
 
-* ── 3. Locate <sf:SMARTFORM> element (skip <abapGit> wrapper) ──────────
+* ── 3. Locate <sf:SMARTFORM> element (to extract FORMNAME only) ────────
   IF lo_root->get_name( ) CS 'SMARTFORM'.
     lo_smartform_el = lo_root.
   ELSE.
@@ -192,29 +192,77 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
-* ── 5. Clear leftover EDTFLAG / DELFLAG on the TADIR entry ─────────────
-  " A previous broken run with IV_SET_EDTFLAG='X' persisted EDTFLAG='X'
-  " in TADIR.  TR_TADIR_INTERFACE with IV_SET_EDTFLAG=' ' does NOT
-  " reliably unset that flag — only direct UPDATE does.  Without this,
-  " every subsequent upload raises:
-  "   "You cannot edit object R3TR SSFO ZTEST_SF with the standard editor"
+* ── 4b. Diagnostic: count node types in the XML before uploading ───────
+*   This proves which version of the file you actually loaded.
+*   Current branch XML should report:  CO=0  TI=1  SE=1  GCODING=1
+  DATA: lv_co_cnt  TYPE i,
+        lv_ti_cnt  TYPE i,
+        lv_se_cnt  TYPE i,
+        lv_gco_cnt TYPE i,
+        li_iter    TYPE REF TO if_ixml_node_iterator,
+        li_n       TYPE REF TO if_ixml_node,
+        lv_nm      TYPE string.
+  li_iter = lo_root->create_iterator( ).
+  li_n    = li_iter->get_next( ).
+  WHILE li_n IS NOT INITIAL.
+    IF li_n->get_type( ) = if_ixml_node=>co_node_element.
+      lv_nm = li_n->get_name( ).
+      IF lv_nm = 'NODETYPE'.
+        DATA(lv_val) = li_n->get_value( ).
+        CASE lv_val.
+          WHEN 'CO'. lv_co_cnt = lv_co_cnt + 1.
+          WHEN 'TI'. lv_ti_cnt = lv_ti_cnt + 1.
+          WHEN 'SE'. lv_se_cnt = lv_se_cnt + 1.
+        ENDCASE.
+      ELSEIF lv_nm = 'GCODING'.
+        lv_gco_cnt = lv_gco_cnt + 1.
+      ENDIF.
+    ENDIF.
+    li_n = li_iter->get_next( ).
+  ENDWHILE.
+  WRITE: / 'XML node counts -> CO:', lv_co_cnt,
+           '  TI:', lv_ti_cnt,
+           '  SE:', lv_se_cnt,
+           '  GCODING:', lv_gco_cnt.
+
+* ── 5. Pre-delete existing form via FB_DELETE_FORM ─────────────────────
+*   abapGit uses FB_DELETE_FORM to remove a Smart Form (see
+*   ZCL_ABAPGIT_OBJECT_SSFO->delete).  This function module cleanly
+*   removes the form across ALL Smart Forms tables (STXFADM, STXFOBJ,
+*   text tables, etc.) — direct SQL on STXFADM alone leaves orphan
+*   node rows that cause the next upload to produce duplicate nodes.
   DATA: lv_tadir_obj_name TYPE sobj_name,
-        ls_tadir          TYPE tadir.
+        lv_form_check     TYPE stxfadm-formname.
   lv_tadir_obj_name = lv_formname.
 
-  SELECT SINGLE * FROM tadir INTO ls_tadir
-    WHERE pgmid    = 'R3TR'
-      AND object   = 'SSFO'
-      AND obj_name = lv_tadir_obj_name.
+  SELECT SINGLE formname FROM stxfadm INTO lv_form_check
+    WHERE formname = lv_formname.
 
-  IF sy-subrc = 0 AND ( ls_tadir-edtflag = 'X' OR ls_tadir-delflag = 'X' ).
-    UPDATE tadir SET edtflag = ' '
-                     delflag = ' '
+  IF sy-subrc = 0.
+    WRITE: / 'Form', lv_formname, 'already exists – deleting via FB_DELETE_FORM.'.
+    CALL FUNCTION 'FB_DELETE_FORM'
+      EXPORTING
+        i_formname            = lv_formname
+        i_with_dialog         = abap_false
+        i_with_confirm_dialog = abap_false
+      EXCEPTIONS
+        no_form               = 1
+        OTHERS                = 2.
+    IF sy-subrc = 0.
+      WRITE: / '  FB_DELETE_FORM succeeded.'.
+    ELSE.
+      WRITE: / '  FB_DELETE_FORM returned sy-subrc =', sy-subrc,
+               '– falling back to direct table cleanup.'.
+      DELETE FROM stxfadm WHERE formname = lv_formname.
+    ENDIF.
+    " Always also clear the TADIR entry so INSERT mode is unambiguous
+    DELETE FROM tadir
       WHERE pgmid    = 'R3TR'
         AND object   = 'SSFO'
         AND obj_name = lv_tadir_obj_name.
     COMMIT WORK.
-    WRITE: / 'Cleared stale EDTFLAG/DELFLAG on TADIR entry for', lv_formname.
+  ELSE.
+    WRITE: / 'No existing form – proceeding directly to INSERT.'.
   ENDIF.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
@@ -227,12 +275,11 @@ START-OF-SELECTION.
         mode                = 'INSERT'
         formname            = lv_formname ).
 
-      " abapGit passes the OUTER root element (the <abapGit> wrapper or
-      " whatever the document root is), NOT the inner <sf:SMARTFORM>.
-      " Passing the inner element causes xml_upload to misread the form
-      " structure (duplicate CODE nodes, loop not recognised as Internal
-      " Table, etc.) because some sections live as siblings of sf:SMARTFORM
-      " in the abapGit-style document. See zabapgit_standalone deserialize.
+      " Pass the OUTER document root (the <abapGit> wrapper, or the
+      " document root when there is no wrapper).  abapGit itself does:
+      "   io_xml->get_raw()->get_root_element()
+      " which returns the <abapGit> element.  Passing the inner
+      " <sf:SMARTFORM> causes xml_upload to misread the tree structure.
       lo_sf->xml_upload(
         EXPORTING
           dom      = lo_root
@@ -249,7 +296,45 @@ START-OF-SELECTION.
       lo_sf->dequeue( lv_formname ).
 
       WRITE: / '✔ Smart Form', lv_formname, 'created/updated and activated.'.
-      WRITE: / '  Run report ZTEST_SF_DRIVER with a VBELN to test it.'.
+
+* ── 7. Force function-module generation ────────────────────────────────
+*   store(im_active=abap_true) marks the form active but does NOT
+*   always trigger generation of the /1BCDWB/SF<nnn> function module.
+*   The driver program needs that FM to call the form, so we force
+*   generation here by calling SSF_FUNCTION_MODULE_NAME.  If the form
+*   has compile errors, generation fails here and we can see why.
+      DATA: lv_fm_name TYPE rs38l_fnam.
+      CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+        EXPORTING
+          formname           = lv_formname
+        IMPORTING
+          fm_name            = lv_fm_name
+        EXCEPTIONS
+          no_form            = 1
+          no_function_module = 2
+          OTHERS             = 3.
+
+      IF sy-subrc = 0 AND lv_fm_name IS NOT INITIAL.
+        " Verify the FM actually exists in TFDIR
+        DATA: lv_tfdir_funcname TYPE tfdir-funcname.
+        SELECT SINGLE funcname FROM tfdir INTO lv_tfdir_funcname
+          WHERE funcname = lv_fm_name.
+        IF sy-subrc = 0.
+          WRITE: / '✔ Generated function module:', lv_fm_name.
+          WRITE: / '  Run ZTEST_SF_DRIVER with a VBELN to test the form.'.
+        ELSE.
+          WRITE: / '[WARN] FM name returned (', lv_fm_name,
+                   ') but FM not found in TFDIR.'.
+          WRITE: / '       Open SMARTFORMS, display', lv_formname,
+                   'and press Ctrl+F3 to activate.'.
+        ENDIF.
+      ELSE.
+        WRITE: / '[ERROR] SSF_FUNCTION_MODULE_NAME failed sy-subrc =', sy-subrc.
+        WRITE: / '        The form was uploaded but cannot be generated.'.
+        WRITE: / '        Open SMARTFORMS, display', lv_formname,
+                 'and press Ctrl+F3.'.
+        WRITE: / '        SAP will then show the exact syntax error blocking activation.'.
+      ENDIF.
 
     CATCH cx_ssf_fb INTO lx_error.
       lv_text = lx_error->get_text( ).

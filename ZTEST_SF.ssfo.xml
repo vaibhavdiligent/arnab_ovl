@@ -158,6 +158,10 @@
    <item>       END OF ty_vbap.</item>
    <item>TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.</item>
   </GTYPES>
+  <GCODING>
+   <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
+   <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
+  </GCODING>
   <GDATA>
    <item>
     <NAME>IT_VBAP</NAME>
@@ -232,80 +236,6 @@
                 <sf:SUCC>
                  <sf:item>
                   <sf:NODE>
-                   <NODETYPE>CO</NODETYPE>
-                   <sf:OBJ>
-                    <sf:CODE>
-                     <NAME>
-                      <INAME>%CODE1</INAME>
-                     </NAME>
-                     <CAPTION>Init</CAPTION>
-                     <CODE>
-                      <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
-                      <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
-                     </CODE>
-                     <T_CAPTION>
-                      <item>
-                       <LANGU>E</LANGU>
-                       <FORMNAME>ZTEST_SF</FORMNAME>
-                       <OBJTYPE>CO</OBJTYPE>
-                       <INAME>%CODE1</INAME>
-                       <CAPTION>Init</CAPTION>
-                      </item>
-                     </T_CAPTION>
-                    </sf:CODE>
-                   </sf:OBJ>
-                   <sf:SUCC/>
-                  </sf:NODE>
-                 </sf:item>
-                 <sf:item>
-                  <sf:NODE>
-                   <NODETYPE>TX</NODETYPE>
-                   <sf:OBJ>
-                    <sf:TEXT>
-                     <NAME>
-                      <INAME>%TEXT1</INAME>
-                     </NAME>
-                     <CAPTION>Header</CAPTION>
-                     <APPMODE>P</APPMODE>
-                     <TEXT>
-                      <item>
-                       <TDFORMAT>*</TDFORMAT>
-                       <TDLINE>Sales Document: &amp;VBELN&amp;</TDLINE>
-                      </item>
-                     </TEXT>
-                     <STYLE_NAME>SYSTEM</STYLE_NAME>
-                     <TEXT_AREA>
-                      <ENABLED>F</ENABLED>
-                      <NCOLS>0</NCOLS>
-                      <NROWS>0</NROWS>
-                     </TEXT_AREA>
-                     <T_CAPTION>
-                      <item>
-                       <LANGU>E</LANGU>
-                       <FORMNAME>ZTEST_SF</FORMNAME>
-                       <OBJTYPE>TI</OBJTYPE>
-                       <INAME>%TEXT1</INAME>
-                       <CAPTION>Header</CAPTION>
-                      </item>
-                     </T_CAPTION>
-                     <T_TEXT>
-                      <item>
-                       <SPRAS>E</SPRAS>
-                       <TXTYPE>F</TXTYPE>
-                       <FORMNAME>ZTEST_SF</FORMNAME>
-                       <INAME>%TEXT1</INAME>
-                       <LINENR>000001</LINENR>
-                       <TDFORMAT>*</TDFORMAT>
-                       <TDLINE>Sales Document: &amp;VBELN&amp;</TDLINE>
-                      </item>
-                     </T_TEXT>
-                    </sf:TEXT>
-                   </sf:OBJ>
-                   <sf:SUCC/>
-                  </sf:NODE>
-                 </sf:item>
-                 <sf:item>
-                  <sf:NODE>
                    <NODETYPE>SE</NODETYPE>
                    <sf:OBJ>
                     <sf:SECTION>
@@ -343,18 +273,18 @@
                    <sf:SUCC>
                     <sf:item>
                      <sf:NODE>
-                      <NODETYPE>TX</NODETYPE>
+                      <NODETYPE>TI</NODETYPE>
                       <sf:OBJ>
                        <sf:TEXT>
                         <NAME>
-                         <INAME>%TEXT2</INAME>
+                         <INAME>%TEXT1</INAME>
                         </NAME>
-                        <CAPTION>Line item</CAPTION>
+                        <CAPTION>Line</CAPTION>
                         <APPMODE>P</APPMODE>
                         <TEXT>
                          <item>
                           <TDFORMAT>*</TDFORMAT>
-                          <TDLINE>&amp;WA_VBAP-VBELN&amp;  &amp;WA_VBAP-POSNR&amp;  &amp;WA_VBAP-MATNR&amp;  &amp;WA_VBAP-MATWA&amp;</TDLINE>
+                          <TDLINE>Sales Doc &amp;VBELN&amp; | Item &amp;WA_VBAP-POSNR&amp; - Material &amp;WA_VBAP-MATNR&amp; (Customer Mat: &amp;WA_VBAP-MATWA&amp;)</TDLINE>
                          </item>
                         </TEXT>
                         <STYLE_NAME>SYSTEM</STYLE_NAME>
@@ -368,8 +298,8 @@
                           <LANGU>E</LANGU>
                           <FORMNAME>ZTEST_SF</FORMNAME>
                           <OBJTYPE>TI</OBJTYPE>
-                          <INAME>%TEXT2</INAME>
-                          <CAPTION>Line item</CAPTION>
+                          <INAME>%TEXT1</INAME>
+                          <CAPTION>Line</CAPTION>
                          </item>
                         </T_CAPTION>
                         <T_TEXT>
@@ -377,10 +307,10 @@
                           <SPRAS>E</SPRAS>
                           <TXTYPE>F</TXTYPE>
                           <FORMNAME>ZTEST_SF</FORMNAME>
-                          <INAME>%TEXT2</INAME>
+                          <INAME>%TEXT1</INAME>
                           <LINENR>000001</LINENR>
                           <TDFORMAT>*</TDFORMAT>
-                          <TDLINE>&amp;WA_VBAP-VBELN&amp;  &amp;WA_VBAP-POSNR&amp;  &amp;WA_VBAP-MATNR&amp;  &amp;WA_VBAP-MATWA&amp;</TDLINE>
+                          <TDLINE>Sales Doc &amp;VBELN&amp; | Item &amp;WA_VBAP-POSNR&amp; - Material &amp;WA_VBAP-MATNR&amp; (Customer Mat: &amp;WA_VBAP-MATWA&amp;)</TDLINE>
                          </item>
                         </T_TEXT>
                        </sf:TEXT>
