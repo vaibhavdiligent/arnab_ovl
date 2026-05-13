@@ -217,6 +217,14 @@
               </NAME>
               <CAPTION>Main Window</CAPTION>
               <WTYPE>M</WTYPE>
+              <LEFT>0.635</LEFT>
+              <U_LEFT>CM</U_LEFT>
+              <TOP>0.635</TOP>
+              <U_TOP>CM</U_TOP>
+              <WIDTH>20.32</WIDTH>
+              <U_WIDTH>CM</U_WIDTH>
+              <HEIGHT>26.67</HEIGHT>
+              <U_HEIGHT>CM</U_HEIGHT>
               <T_CAPTION>
                <item>
                 <LANGU>E</LANGU>
