@@ -38,7 +38,7 @@ START-OF-SELECTION.
       OTHERS             = 3.
 
   IF sy-subrc <> 0.
-    MESSAGE 'Smart Form ZTEST_SF not found. Create it via transaction SMARTFORMS.' TYPE 'E'.
+    MESSAGE 'Smart Form ZTEST_SF not found or not compiled.' TYPE 'E'.
     RETURN.
   ENDIF.
 
