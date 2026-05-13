@@ -257,20 +257,19 @@ START-OF-SELECTION.
     WRITE: / '  FB_DELETE_FORM returned sy-subrc =', sy-subrc.
   ENDIF.
 
-  " Belt-and-braces: also wipe the Smart Form storage tables directly.
-  " FB_DELETE_FORM normally clears these, but if it raised no_form
-  " because STXFADM was empty, the orphan STXFOBJ rows would still be
-  " there.  Direct DELETE guarantees a clean slate.
-  DELETE FROM stxfadm  WHERE formname = lv_formname.
-  DELETE FROM stxfobj  WHERE formname = lv_formname.
-  DELETE FROM stxfobjt WHERE formname = lv_formname.
-  DELETE FROM stxftxt  WHERE formname = lv_formname.
+  " Belt-and-braces: also wipe the Smart Form admin row and TADIR
+  " entry directly.  FB_DELETE_FORM normally clears the node tables
+  " (STXFOBJ/STXFOBJT/STXFTXT) automatically.  We do not DELETE those
+  " here because table names differ across SAP releases - direct
+  " access would cause a syntax error on systems where they don't
+  " exist or are named differently.
+  DELETE FROM stxfadm WHERE formname = lv_formname.
   DELETE FROM tadir
     WHERE pgmid    = 'R3TR'
       AND object   = 'SSFO'
       AND obj_name = lv_tadir_obj_name.
   COMMIT WORK.
-  WRITE: / 'Direct table cleanup of STXFADM/STXFOBJ/STXFOBJT/STXFTXT/TADIR done.'.
+  WRITE: / 'Direct table cleanup of STXFADM/TADIR done.'.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
