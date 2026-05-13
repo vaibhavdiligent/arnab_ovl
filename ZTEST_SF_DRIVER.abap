@@ -17,32 +17,14 @@ PARAMETERS: p_vbeln TYPE vbeln_va OBLIGATORY.
 *----------------------------------------------------------------------*
 * DATA DECLARATIONS
 *----------------------------------------------------------------------*
-TYPES: BEGIN OF ty_vbap,
-         vbeln TYPE vbeln_va,
-         posnr TYPE posnr_va,
-         matnr TYPE matnr,
-         matwa TYPE matwa,
-       END OF ty_vbap.
-TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap WITH DEFAULT KEY.
-
 DATA: lv_fm_name  TYPE rs38l_fnam,
       ls_control  TYPE ssfctrlop,
-      ls_output   TYPE ssfcompop,
-      lt_vbap     TYPE ty_vbap1.
+      ls_output   TYPE ssfcompop.
 
 *----------------------------------------------------------------------*
 * START-OF-SELECTION
 *----------------------------------------------------------------------*
 START-OF-SELECTION.
-
-  " Fetch line items for the sales order
-  SELECT vbeln posnr matnr matwa FROM vbap
-    INTO TABLE lt_vbap WHERE vbeln = p_vbeln.
-
-  IF lt_vbap IS INITIAL.
-    MESSAGE 'No line items found for this sales order.' TYPE 'W'.
-    RETURN.
-  ENDIF.
 
   " Resolve the generated function module name for Smart Form ZTEST_SF
   CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
@@ -74,7 +56,6 @@ START-OF-SELECTION.
       control_parameters = ls_control
       output_options     = ls_output
       vbeln              = p_vbeln
-      it_vbap            = lt_vbap
     EXCEPTIONS
       formatting_error   = 1
       internal_error     = 2
