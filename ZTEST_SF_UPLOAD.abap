@@ -150,11 +150,19 @@ START-OF-SELECTION.
   IF lo_root->get_name( ) CS 'SMARTFORM'.
     lo_smartform_el = lo_root.
   ELSE.
-    " abapGit wrapper – take first child
-    lo_smartform_el ?= lo_root->get_first_child( ).
-    WHILE lo_smartform_el IS NOT INITIAL
-       AND NOT lo_smartform_el->get_name( ) CS 'SMARTFORM'.
-      lo_smartform_el ?= lo_smartform_el->get_next( ).
+    " abapGit wrapper – scan children safely, skipping comment/text nodes
+    DATA: lo_child_node TYPE REF TO if_ixml_node,
+          lo_child_el   TYPE REF TO if_ixml_element.
+    lo_child_node = lo_root->get_first_child( ).
+    WHILE lo_child_node IS NOT INITIAL.
+      IF lo_child_node->get_type( ) = if_ixml_node=>co_node_element.
+        lo_child_el ?= lo_child_node.
+        IF lo_child_el->get_name( ) CS 'SMARTFORM'.
+          lo_smartform_el = lo_child_el.
+          EXIT.
+        ENDIF.
+      ENDIF.
+      lo_child_node = lo_child_node->get_next( ).
     ENDWHILE.
   ENDIF.
 
