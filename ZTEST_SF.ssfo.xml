@@ -159,10 +159,16 @@
    <item>TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.</item>
   </GTYPES>
   <GCODING>
+   <item>lv_vbeln = vbeln.</item>
    <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
-   <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
+   <item>  INTO TABLE it_vbap WHERE vbeln = lv_vbeln.</item>
   </GCODING>
   <GDATA>
+   <item>
+    <NAME>LV_VBELN</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBELN</TYPENAME>
+   </item>
    <item>
     <NAME>IT_VBAP</NAME>
     <TYPING>TYPE</TYPING>
