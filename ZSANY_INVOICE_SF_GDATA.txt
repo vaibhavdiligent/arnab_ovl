@@ -1,0 +1,156 @@
+Global Data rows to enter in SMARTFORMS -> Global Definitions -> Global Data
+Format: NAME | TYPING | REFERENCE TYPE | DEFAULT
+================================================================================
+LV_BEZEI                       | TYPE   | T005U-BEZEI                    | 
+LV_LINE                        | TYPE   | C LENGTH 50                    | 
+LV_LINE1                       | TYPE   | C LENGTH 255                   | 
+GV_INCO                        | TYPE   | C LENGTH 50                    | 
+GV_INCO1                       | TYPE   | VBKD-INCO1                     | 
+GV_INCO2                       | TYPE   | VBKD-INCO2                     | 
+LV_INCOTERM                    | TYPE   | VBKD-INCO2                     | 
+LV_DESCRIP                     | TYPE   | C LENGTH 100                   | 
+LV_KSCHL                       | TYPE   | KONV-KSCHL                     | 
+WA_QR                          | TYPE   | ZAGST_B2C_QR_INV_DATA          | 
+WA_VBRK_11                     | TYPE   | VBRK                           | 
+IT_VBRK_11                     | TYPE   | IT_VBRK_1                      | 
+LV_KDMAT                       | TYPE   | KNMT-KDMAT                     | 
+IGST_VALUE                     | TYPE   | CHAR20                         | 
+IT_VBRK                        | TYPE   | TT_VBRK                        | 
+IT_VBAP                        | TYPE   | TT_VBAP                        | 
+IT_VBAK                        | TYPE   | TT_VBAK                        | 
+IT_LIKP                        | TYPE   | TT_LIKP                        | 
+IT_KONV                        | TYPE   | TT_KONV                        | 
+ITJ_1IMOCUST                   | TYPE   | TTJ_1IMOCUST                   | 
+IT_OBJK                        | TYPE   | TT_OBJK                        | 
+IT_EKKO                        | TYPE   | TT_EKKO                        | 
+IT_EKPO                        | TYPE   | TT_EKPO                        | 
+IT_VBPA                        | TYPE   | TT_VBPA                        | 
+IT_VBPA1                       | TYPE   | TT_VBPA                        | 
+ITJ_1IMOCUST1                  | TYPE   | TTJ_1IMOCUST                   | 
+LT_VBPA                        | TYPE   | TT_VBPA                        | 
+IT_VBRP                        | TYPE   | TT_VBRP                        | 
+IT_FINAL                       | TYPE   | TT_FINAL                       | 
+WA_OBJK                        | TYPE   | OBJK                           | 
+I_SERNR                        | TYPE   | STRING                         | 
+TCS_RATE                       | TYPE   | P DECIMALS 3                   | 
+TCS_VALUE                      | TYPE   | P DECIMALS 2                   | 
+WA_EKKO                        | TYPE   | EKKO                           | 
+WA_EKPO                        | TYPE   | EKPO                           | 
+CHASSIS                        | TYPE   | STRING                         | 
+ENGINE                         | TYPE   | STRING                         | 
+WA_VBPA                        | TYPE   | VBPA                           | 
+K007_RATE                      | TYPE   | P DECIMALS 2                   | 
+K007_VALU                      | TYPE   | P DECIMALS 2                   | 
+ZINT_RATE                      | TYPE   | P DECIMALS 2                   | 
+ZINT_VALU                      | TYPE   | P DECIMALS 2                   | 
+I_J_1IPANNO                    | TYPE   | J_1IMOCUST-J_1IPANNO           | 
+WA_VBPA1                       | TYPE   | VBPA                           | 
+WAJ_1IMOCUST1                  | TYPE   | J_1IMOCUST                     | 
+LS_T005U                       | TYPE   | T005U                          | 
+LS_VBPA                        | TYPE   | VBPA                           | 
+WA_KNVV                        | TYPE   | KNVV                           | 
+I_VCBC                         | TYPE   | STRING                         | 
+I_VCBC_DESC                    | TYPE   | STRING                         | 
+I_CHALLAN_NO                   | TYPE   | STRING                         | 
+I_CHALLAN_DATE                 | TYPE   | STRING                         | 
+I_BODY_SERNO                   | TYPE   | STRING                         | 
+I_CHASSIS_NO                   | TYPE   | STRING                         | 
+I_ENGINE_NO                    | TYPE   | STRING                         | 
+I_FKART                        | TYPE   | VBRK-FKART                     | 
+F_TOTAL_TXT                    | TYPE   | C LENGTH 100                   | 
+IGST_RATE                      | TYPE   | P DECIMALS 2                   | 
+CGST_RATE                      | TYPE   | P DECIMALS 2                   | 
+ZF01_RATE                      | TYPE   | P DECIMALS 2                   | 
+SGST_RATE                      | TYPE   | P DECIMALS 2                   | 
+IGST_VALU                      | TYPE   | P DECIMALS 2                   | 
+CGST_VALU                      | TYPE   | P DECIMALS 2                   | 
+ZF01_VALU                      | TYPE   | P DECIMALS 2                   | 
+SGST_VALU                      | TYPE   | P DECIMALS 2                   | 
+IGST_VALU_TXT                  | TYPE   | C LENGTH 100                   | 
+CGST_VALU_TXT                  | TYPE   | C LENGTH 100                   | 
+ZF01_VALU_TXT                  | TYPE   | C LENGTH 100                   | 
+SGST_VALU_TXT                  | TYPE   | C LENGTH 100                   | 
+GV_IGST                        | TYPE   | P DECIMALS 2                   | 
+G_TOTAL                        | TYPE   | P DECIMALS 2                   | 
+G_TOT_TEXT                     | TYPE   | C LENGTH 100                   | 
+GV_PAGE                        | TYPE   | C LENGTH 30                    | 
+I_HYPO                         | TYPE   | STRING                         | 
+WA_ADR6                        | TYPE   | ADR6                           | 
+WA_ADR7                        | TYPE   | ADR6                           | 
+WA_SER01                       | TYPE   | SER01                          | 
+WA_VBRK                        | TYPE   | VBRK                           | 
+WA_VBRP                        | TYPE   | VBRP                           | 
+WA_VBAP                        | TYPE   | VBAP                           | 
+WA_VBAK                        | TYPE   | VBAK                           | 
+WA_LIKP                        | TYPE   | LIKP                           | 
+WA_T001W                       | TYPE   | T001W                          | 
+WA_PLANT                       | TYPE   | ADRC                           | 
+WA_BILLP                       | TYPE   | ADRC                           | 
+WA_SHIPT                       | TYPE   | ADRC                           | 
+WAJ_1BBRANCH                   | TYPE   | J_1BBRANCH                     | 
+WA_KNA1                        | TYPE   | KNA1                           | 
+WA_KNA2                        | TYPE   | KNA1                           | 
+WA_T005U                       | TYPE   | T005U                          | 
+SR_NO                          | TYPE   | I                              | 
+HSN_SAC                        | TYPE   | MARC-STEUC                     | 
+TOTAL                          | TYPE   | P DECIMALS 2                   | 
+WA_KONV                        | TYPE   | KONV                           | 
+WAJ_1IMOCUST                   | TYPE   | J_1IMOCUST                     | 
+RATE                           | TYPE   | P DECIMALS 2                   | 
+F_TOTAL                        | TYPE   | P DECIMALS 2                   | 
+LV_PO_NO                       | TYPE   | VBKD-BSTKD                     | 
+LV_PO_DATE                     | TYPE   | EKKO-AEDAT                     | 
+LV_DEL_NO                      | TYPE   | VBRP-VGBEL                     | 
+LV_INV_NO                      | TYPE   | VBAK-VBELN                     | 
+LV_INVOICE_DATE                | TYPE   | VBRK-FKDAT                     | 
+LV_SHIPPED_TO                  | TYPE   | STRING                         | 
+LV_BILLED_TO                   | TYPE   | STRING                         | 
+LV_DISP_FROM                   | TYPE   | STRING                         | 
+DISC_TXT                       | TYPE   | STRING                         | 
+ACCESS_TXT                     | TYPE   | STRING                         | 
+IGST_TXT                       | TYPE   | STRING                         | 
+CGST_TXT                       | TYPE   | STRING                         | 
+SGST_TXT                       | TYPE   | STRING                         | 
+TCS_TXT                        | TYPE   | STRING                         | 
+INTREST_TXT                    | TYPE   | STRING                         | 
+LOGO                           | TYPE   | XSTRING                        | 
+FRIEGHT_TXT                    | TYPE   | STRING                         | 
+LV_ORDER_DATE                  | TYPE   | VBAK-BSTDK                     | 
+WAERS                          | TYPE   | WAERS                          | 
+LV_ORDER                       | TYPE   | VBRP-AUBEL                     | 
+LV_IGST                        | TYPE   | P DECIMALS 2                   | 
+DP_NAME1                       | TYPE   | ADRC-NAME1                     | 
+DP_SUP1                        | TYPE   | ADRC-STR_SUPPL1                | 
+DP_SUP2                        | TYPE   | ADRC-STR_SUPPL2                | 
+DP_SUP3                        | TYPE   | ADRC-STR_SUPPL3                | 
+DP_CITY1                       | TYPE   | ADRC-CITY1                     | 
+DP_POST_CODE1                  | TYPE   | ADRC-POST_CODE1                | 
+WA_BILL_TO                     | TYPE   | TY_BILL                        | 
+WA_SHIP_TO                     | TYPE   | TY_BILL                        | 
+GV_EMAIL                       | TYPE   | ADR6-SMTP_ADDR                 | 
+ACC_VALUE                      | TYPE   |  P DECIMALS 2                  | 
+TOT_ACC_VALUE                  | TYPE   |  P DECIMALS 2                  | 
+WA_TEXT                        | TYPE   | TY_TEXT                        | 
+IT_TEXT                        | TYPE   | TT_TEXT                        | 
+WA_BILL                        | TYPE   | TY_TEXT                        | 
+TT_BILL                        | TYPE   | TT_TEXT                        | 
+GV_BILL                        | TYPE   | STRING                         | 
+WA_SHIP                        | TYPE   | TY_TEXT                        | 
+TT_SHIP                        | TYPE   | TT_TEXT                        | 
+GV_SHIP                        | TYPE   | STRING                         | 
+WA_DP                          | TYPE   | TY_TEXT                        | 
+TT_DP                          | TYPE   | TT_TEXT                        | 
+GV_DP                          | TYPE   | STRING                         | 
+GS_ZEYDIGI_EINV_AZR            | TYPE   | ZEYDIGI_EINV_AZR               | 
+GV_QRCODE2                     | TYPE   | STRING                         | 
+GV_QCODE                       | TYPE   | XSTRING                        | 
+JTC1_RATE                      | TYPE   | P DECIMALS 3                   | 
+JTC1_VALUE                     | TYPE   | P DECIMALS 2                   | 
+JTC2_RATE                      | TYPE   | P DECIMALS 3                   | 
+JTC2_VALUE                     | TYPE   | P DECIMALS 2                   | 
+JTC1_TXT                       | TYPE   | STRING                         | 
+JTC2_TXT                       | TYPE   | STRING                         | 
+LV_DECLARATION                 | TYPE   | STRING                         | 
+LV_AUART                       | TYPE   | AUART                          | 
+
+Total: 151 global data items

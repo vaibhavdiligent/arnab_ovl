@@ -1,0 +1,196 @@
+====================================================================
+SAP Smart Form ZSANY_INVOICE_SF - Manual Creation Guide
+Equivalent of Adobe Form ZSANY_INVOICE_INTERFACE
+====================================================================
+
+This guide creates a Smart Form with the SAME interface, types, global
+data, and initialization code as the source Adobe Form. The LAYOUT
+(invoice positioning) must be built manually in SMARTFORMS Form Painter
+- Adobe XFA layout cannot be auto-converted to Smart Forms format.
+
+Source files (in this repo):
+   ZSANY_INVOICE_SF_INTERFACE.txt  - the 4 import parameters
+   ZSANY_INVOICE_SF_GTYPES.abap    - 75 lines of TYPES code
+   ZSANY_INVOICE_SF_GDATA.txt      - 151 global data variables
+   ZSANY_INVOICE_SF_INIT.abap      - 2469 lines of init code
+   ZSANY_INVOICE_DRIVER.abap       - driver program
+
+--------------------------------------------------------------------
+STEP 1  Create the Smart Form
+--------------------------------------------------------------------
+1. Transaction SMARTFORMS.
+2. Form name: ZSANY_INVOICE_SF.
+3. Click Create.
+4. Description: "Sany Invoice (Smart Form equivalent of ZSANY_INVOICE)".
+5. Save (Ctrl+S). Package: $TMP or your dev package.
+
+--------------------------------------------------------------------
+STEP 2  Form Interface - Import tab
+--------------------------------------------------------------------
+Left tree -> Global Settings -> Form Interface. On the Import tab,
+add these 4 rows (see ZSANY_INVOICE_SF_INTERFACE.txt):
+
+   Parameter Name | Type Assignment | Reference Type
+   -------------- | --------------- | --------------
+   LV_STR         | TYPE            | STRING
+   I_VBELN        | TYPE            | VBRP-VBELN
+   I_VGBEL        | TYPE            | VBRP-VGBEL
+   I_AUBEL        | TYPE            | VBRP-AUBEL
+
+Leave Export and Exceptions tabs as default.
+Save.
+
+--------------------------------------------------------------------
+STEP 3  Global Definitions - Types tab
+--------------------------------------------------------------------
+Left tree -> Global Settings -> Global Definitions -> Types tab.
+1. Open ZSANY_INVOICE_SF_GTYPES.abap in this repo.
+2. Copy ALL its content (~75 lines).
+3. Paste into the editor on the Types tab.
+4. Save (Ctrl+S).
+5. Press the syntax check (Ctrl+F2) - should be clean.
+
+Key types defined:
+   TY_BILL, TT_BILL1     - billing / shipping address line
+   IT_VBRK_1             - billing header table
+   TT_VBRK, TT_VBRP      - billing document tables
+   TT_VBAP, TT_VBAK      - sales document tables
+   TT_LIKP, TT_KONV      - delivery, condition tables
+   TTJ_1IMOCUST          - India customer master
+   TT_OBJK               - object table (serial numbers)
+   TT_EKKO, TT_EKPO      - purchase docs
+   TT_VBPA               - partners
+   TY_TEXT, TT_TEXT      - text helper structure
+   ST_FINAL, TT_FINAL    - final line item structure
+
+--------------------------------------------------------------------
+STEP 4  Global Definitions - Global Data tab
+--------------------------------------------------------------------
+Left tree -> Global Settings -> Global Definitions -> Global Data tab.
+Open ZSANY_INVOICE_SF_GDATA.txt and enter ALL 151 rows.
+
+Fast approach:
+- The Global Data tab has a table input control.
+- For each row in ZSANY_INVOICE_SF_GDATA.txt, fill:
+     Variable Name, Type Assignment (TYPE), Reference Type, Default.
+
+Time estimate: 30-45 minutes for 151 rows. You may copy from clipboard
+if your SAP GUI version supports table paste.
+
+Save.
+
+--------------------------------------------------------------------
+STEP 5  Global Definitions - Initialization tab
+--------------------------------------------------------------------
+Left tree -> Global Settings -> Global Definitions -> Initialization tab.
+1. Open ZSANY_INVOICE_SF_INIT.abap in this repo.
+2. Copy ALL its content (~2469 lines).
+3. Paste into the Code editor on the Initialization tab.
+4. In the Output Parameters sub-tab of Initialization, add the tables
+   and structures the layout will reference, typically:
+     IT_FINAL, IT_VBRK, IT_VBRP, IT_VBAP, IT_VBAK, IT_LIKP, IT_KONV,
+     IT_EKKO, IT_EKPO, IT_VBPA, IT_VBPA1, IT_OBJK, IT_TEXT, TT_BILL,
+     TT_SHIP, TT_DP, WA_VBRK, WA_VBRP, WA_KNA1, WA_KNA2, WA_T001W,
+     WA_BILL_TO, WA_SHIP_TO, WA_PLANT, WA_BILLP, WA_SHIPT, WA_ADR6,
+     WA_ADR7, WA_QR, GV_QRCODE2, GV_QCODE,
+     plus any totals: G_TOTAL, F_TOTAL, IGST_VALU, CGST_VALU,
+     SGST_VALU, TCS_VALUE, TCS_RATE, IGST_RATE, CGST_RATE, SGST_RATE,
+     RATE, TOTAL, ACC_VALUE, TOT_ACC_VALUE, etc.
+
+5. Save and run syntax check (Ctrl+F2). Resolve any unresolved
+   references (usually missing global data rows from STEP 4).
+
+--------------------------------------------------------------------
+STEP 6  Pages and Windows - Layout
+--------------------------------------------------------------------
+This is the part that CANNOT be auto-converted. You must rebuild the
+invoice layout in SMARTFORMS Form Painter. The original Adobe layout
+contains these regions (use as a checklist while building):
+
+   Header band:
+     - Company logo (use LOGO XSTRING variable)
+     - Title: "Tax Invoice" / "Bill of Supply" (driven by I_FKART)
+     - Invoice number (LV_INV_NO), date (LV_INVOICE_DATE)
+
+   Bill-to / Ship-to / Dispatch-from band (3 columns):
+     - Bill-to address (LV_BILLED_TO or GV_BILL)
+     - Ship-to address (LV_SHIPPED_TO or GV_SHIP)
+     - Dispatched-from address (LV_DISP_FROM or GV_DP)
+
+   Order info band:
+     - PO No (LV_PO_NO), PO date (LV_PO_DATE)
+     - Order No (LV_ORDER), Order date (LV_ORDER_DATE)
+     - Delivery No (LV_DEL_NO)
+     - Incoterm (GV_INCO)
+
+   Main items table - LOOP over IT_FINAL with WA_FINAL work area:
+     - Sr.No, HSN/SAC, Description, Qty, Unit Rate, Total
+
+   For each item, sub-loops over IT_OBJK / IT_KONV to print serial,
+   engine, chassis numbers and condition lines.
+
+   Taxes block - displayed from totals:
+     IGST (IGST_RATE / IGST_VALU)
+     CGST (CGST_RATE / CGST_VALU)
+     SGST (SGST_RATE / SGST_VALU)
+     TCS  (TCS_RATE  / TCS_VALUE)
+     K007 (discount, K007_RATE / K007_VALU)
+     ZINT (interest, ZINT_RATE / ZINT_VALU)
+     JTC1 / JTC2 (state cess rates)
+
+   Totals band:
+     Grand Total (G_TOTAL), Total in words (G_TOT_TEXT)
+
+   Declaration / QR code band:
+     LV_DECLARATION
+     QR code (GV_QCODE or GV_QRCODE2) - use Graphic node with XSTRING
+
+   Footer: page number (GV_PAGE)
+
+For each band, recommended Smart Forms construction:
+   - One MAIN window for items; secondary windows for header/totals.
+   - Use TEMPLATE nodes for fixed-grid tables (taxes, totals).
+   - Use TABLE nodes for variable-row tables (IT_FINAL line items).
+   - Use TEXT nodes with &VAR& placeholders for free text.
+   - Use ADDRESS node for partner addresses (cleaner than concatenating).
+   - Use GRAPHIC node for the QR code (insert from XSTRING).
+
+--------------------------------------------------------------------
+STEP 7  Activate
+--------------------------------------------------------------------
+1. Press Ctrl+F3 to activate.
+2. Fix any errors flagged. Usual culprits:
+     - Missing entry in Global Data for a variable used in init code.
+     - Output Parameters not declared for variables read by the layout.
+     - Field name typo in a text node placeholder.
+
+--------------------------------------------------------------------
+STEP 8  Test
+--------------------------------------------------------------------
+1. SE38 -> ZSANY_INVOICE_DRIVER -> F8.
+2. Enter a valid billing document (I_VBELN), or also fill I_VGBEL
+   (delivery) and I_AUBEL (sales order) if your init code requires them.
+3. Print preview shows the rendered invoice.
+
+--------------------------------------------------------------------
+NOTES ON THE ADOBE-TO-SMARTFORMS MIGRATION
+--------------------------------------------------------------------
+* Adobe XFA layout uses absolute positioning. Smart Forms uses
+  relative geometry (windows, templates, tables). The layout MUST be
+  redrawn manually - there is no automatic tool.
+
+* QR code in Adobe Form is rendered from a barcode element. In Smart
+  Forms, render the same XSTRING (GV_QCODE) via a GRAPHIC node, set
+  the resolution / size in the node attributes.
+
+* Long text fetched in init via READ_TEXT continues to work
+  unchanged in the Smart Form Initialization tab.
+
+* If you need 100% pixel-perfect reproduction of the Adobe Form,
+  Smart Forms is the wrong tool - consider keeping the Adobe Form or
+  switching to SAPscript with absolute coordinates. Smart Forms is
+  intended for structured business documents.
+
+====================================================================
+END OF GUIDE
+====================================================================

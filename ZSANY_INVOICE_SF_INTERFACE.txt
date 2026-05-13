@@ -1,0 +1,6 @@
+Import Parameters to enter in SMARTFORMS -> Form Interface -> Import tab
+================================================================================
+LV_STR                         | TYPE   | STRING                         | optional=
+I_VBELN                        | TYPE   | VBRP-VBELN                     | optional=
+I_VGBEL                        | TYPE   | VBRP-VGBEL                     | optional=
+I_AUBEL                        | TYPE   | VBRP-AUBEL                     | optional=
