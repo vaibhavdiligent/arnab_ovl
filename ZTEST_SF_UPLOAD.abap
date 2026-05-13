@@ -296,7 +296,45 @@ START-OF-SELECTION.
       lo_sf->dequeue( lv_formname ).
 
       WRITE: / '✔ Smart Form', lv_formname, 'created/updated and activated.'.
-      WRITE: / '  Run report ZTEST_SF_DRIVER with a VBELN to test it.'.
+
+* ── 7. Force function-module generation ────────────────────────────────
+*   store(im_active=abap_true) marks the form active but does NOT
+*   always trigger generation of the /1BCDWB/SF<nnn> function module.
+*   The driver program needs that FM to call the form, so we force
+*   generation here by calling SSF_FUNCTION_MODULE_NAME.  If the form
+*   has compile errors, generation fails here and we can see why.
+      DATA: lv_fm_name TYPE rs38l_fnam.
+      CALL FUNCTION 'SSF_FUNCTION_MODULE_NAME'
+        EXPORTING
+          formname           = lv_formname
+        IMPORTING
+          fm_name            = lv_fm_name
+        EXCEPTIONS
+          no_form            = 1
+          no_function_module = 2
+          OTHERS             = 3.
+
+      IF sy-subrc = 0 AND lv_fm_name IS NOT INITIAL.
+        " Verify the FM actually exists in TFDIR
+        DATA: lv_tfdir_funcname TYPE tfdir-funcname.
+        SELECT SINGLE funcname FROM tfdir INTO lv_tfdir_funcname
+          WHERE funcname = lv_fm_name.
+        IF sy-subrc = 0.
+          WRITE: / '✔ Generated function module:', lv_fm_name.
+          WRITE: / '  Run ZTEST_SF_DRIVER with a VBELN to test the form.'.
+        ELSE.
+          WRITE: / '[WARN] FM name returned (', lv_fm_name,
+                   ') but FM not found in TFDIR.'.
+          WRITE: / '       Open SMARTFORMS, display', lv_formname,
+                   'and press Ctrl+F3 to activate.'.
+        ENDIF.
+      ELSE.
+        WRITE: / '[ERROR] SSF_FUNCTION_MODULE_NAME failed sy-subrc =', sy-subrc.
+        WRITE: / '        The form was uploaded but cannot be generated.'.
+        WRITE: / '        Open SMARTFORMS, display', lv_formname,
+                 'and press Ctrl+F3.'.
+        WRITE: / '        SAP will then show the exact syntax error blocking activation.'.
+      ENDIF.
 
     CATCH cx_ssf_fb INTO lx_error.
       lv_text = lx_error->get_text( ).
