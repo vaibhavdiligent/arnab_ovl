@@ -192,6 +192,39 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
+* ── 4b. Diagnostic: count node types in the XML before uploading ───────
+*   This proves which version of the file you actually loaded.
+*   Current branch XML should report:  CO=0  TI=1  SE=1  GCODING=1
+  DATA: lv_co_cnt  TYPE i,
+        lv_ti_cnt  TYPE i,
+        lv_se_cnt  TYPE i,
+        lv_gco_cnt TYPE i,
+        li_iter    TYPE REF TO if_ixml_node_iterator,
+        li_n       TYPE REF TO if_ixml_node,
+        lv_nm      TYPE string.
+  li_iter = lo_root->create_iterator( ).
+  li_n    = li_iter->get_next( ).
+  WHILE li_n IS NOT INITIAL.
+    IF li_n->get_type( ) = if_ixml_node=>co_node_element.
+      lv_nm = li_n->get_name( ).
+      IF lv_nm = 'NODETYPE'.
+        DATA(lv_val) = li_n->get_value( ).
+        CASE lv_val.
+          WHEN 'CO'. lv_co_cnt = lv_co_cnt + 1.
+          WHEN 'TI'. lv_ti_cnt = lv_ti_cnt + 1.
+          WHEN 'SE'. lv_se_cnt = lv_se_cnt + 1.
+        ENDCASE.
+      ELSEIF lv_nm = 'GCODING'.
+        lv_gco_cnt = lv_gco_cnt + 1.
+      ENDIF.
+    ENDIF.
+    li_n = li_iter->get_next( ).
+  ENDWHILE.
+  WRITE: / 'XML node counts -> CO:', lv_co_cnt,
+           '  TI:', lv_ti_cnt,
+           '  SE:', lv_se_cnt,
+           '  GCODING:', lv_gco_cnt.
+
 * ── 5. Pre-delete existing form via FB_DELETE_FORM ─────────────────────
 *   abapGit uses FB_DELETE_FORM to remove a Smart Form (see
 *   ZCL_ABAPGIT_OBJECT_SSFO->delete).  This function module cleanly
