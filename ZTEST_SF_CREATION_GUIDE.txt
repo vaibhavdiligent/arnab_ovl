@@ -1,201 +1,126 @@
 ====================================================================
-SAP Smart Form ZTEST_SF – Manual Creation Guide
+SAP Smart Form ZTEST_SF - Manual Creation Guide (10 minutes)
 Equivalent of Adobe Form ZTEST_SFP
 ====================================================================
 
-WHY THE XML IMPORT FAILS
-─────────────────────────
-The file ZTEST_SF.xml uses the namespace "http://www.sap.com/abapxml"
-(asx:abap format). That namespace is used by Adobe Forms (transaction
-SFP), NOT by Smart Forms (transaction SMARTFORMS).
-
-Smart Forms only accepts XML files that were previously exported by the
-SMARTFORMS Upload/Download utility itself. There is no way to import a
-hand-crafted XML into SMARTFORMS directly.
-
-SOLUTION: Create the Smart Form manually in transaction SMARTFORMS
-following the steps below, then use ZTEST_SF_DRIVER.abap to call it.
-
-====================================================================
-STEP-BY-STEP CREATION IN TRANSACTION SMARTFORMS
-====================================================================
-
-1. OPEN SMARTFORMS
-   ─────────────────
-   • Go to transaction: SMARTFORMS
-   • In the "Form" field enter:  ZTEST_SF
-   • Click "Create" button (or press F5)
-   • Description: Table Demo Smart Form
-   • Click the green checkmark (Enter)
+Step-by-step creation in transaction SMARTFORMS.
+Skip the XML upload approach - create the form by hand in the GUI.
 
 --------------------------------------------------------------------
-2. FORM INTERFACE
-   (Left tree → Global Settings → Form Interface)
-   ─────────────────────────────────────────────
-   Click "Form Interface" in the left-hand tree.
-
-   IMPORT tab:
-   ┌──────────┬────────┬──────────┬──────────┐
-   │ Name     │ Typing │ Type     │ Optional │
-   ├──────────┼────────┼──────────┼──────────┤
-   │ VBELN    │ TYPE   │ VBELN    │          │
-   └──────────┴────────┴──────────┴──────────┘
-   (VBELN is the sales order number passed in from the calling program)
+STEP 0  Delete any leftover form
+--------------------------------------------------------------------
+1. SE38 -> ZTEST_SF_UPLOAD (if you used it before, just to clean tables)
+   - The new version of this program also wipes STXFADM/STXFOBJ rows.
+2. Or in SMARTFORMS: enter ZTEST_SF, menu Form -> Delete (confirm).
+3. Verify: SMARTFORMS -> ZTEST_SF -> Display -> message
+   "Smart form ZTEST_SF does not exist".
 
 --------------------------------------------------------------------
-3. GLOBAL DEFINITIONS
-   (Left tree → Global Settings → Global Definitions)
-   ────────────────────────────────────────────────────
-
-   ── 3a. Types tab ─────────────────────────────────────────────
-   Enter the following ABAP code in the "Types" editor:
-
-       TYPES: BEGIN OF ty_vbap,
-                vbeln  TYPE vbeln_va,
-                posnr  TYPE posnr_va,
-                matnr  TYPE matnr,
-                matwa  TYPE matwa,
-              END OF ty_vbap.
-
-       TYPES: ty_vbap1 TYPE TABLE OF ty_vbap.
-
-   ── 3b. Global Data tab ───────────────────────────────────────
-   ┌──────────┬────────┬──────────────────────────────────────┐
-   │ Name     │ Typing │ Type                                 │
-   ├──────────┼────────┼──────────────────────────────────────┤
-   │ IT_VBAP  │ TYPE   │ TY_VBAP1                             │
-   │ WA_VBAP  │ TYPE   │ TY_VBAP                              │
-   └──────────┴────────┴──────────────────────────────────────┘
-
-   ── 3c. Initialization tab ────────────────────────────────────
-   Enter the following ABAP code:
-
-       SELECT vbeln
-              posnr
-              matnr
-              matwa
-         FROM vbap
-         INTO TABLE it_vbap
-        WHERE vbeln = vbeln.
-
-       IF sy-subrc = 0.
-       ENDIF.
+STEP 1  Create the form
+--------------------------------------------------------------------
+1. Transaction SMARTFORMS.
+2. Form name: ZTEST_SF.
+3. Click "Create".
+4. Description: "Sales Order Items - Smart Form".
+5. Save (Ctrl+S). Package: $TMP (or your dev package).
 
 --------------------------------------------------------------------
-4. PAGES AND WINDOWS
-   (Left tree → Pages and Windows)
-   ─────────────────────────────────
-
-   ── 4a. Rename or configure the default page ──────────────────
-   Right-click "%PAGE1 New Page" → Rename → PAGE1
-   Properties (right panel):
-     • Description : Page 1
-     • Paper Format : LETTER
-     • Orientation : Portrait
-     • Next Page   : (leave blank – single page form)
-
-   ── 4b. Create the MAIN window on PAGE1 ──────────────────────
-   Right-click PAGE1 → Create → Window
-     • Name        : MAIN
-     • Type        : Main Window   ← IMPORTANT
-     • Description : Main output window
-     • Left margin : 6.35 mm
-     • Upper margin: 6.35 mm
-     • Width       : 203.2 mm
-     • Height      : 266.7 mm
+STEP 2  Form Interface (left tree -> Global Settings -> Form Interface)
+--------------------------------------------------------------------
+Tab: Import
+   Add row:
+      Parameter Name : VBELN
+      Type assignment: TYPE
+      Reference type : VBELN
+      Optional       : (unchecked)
+      Pass Value     : (unchecked)
+Tab: Tables, Exceptions - leave default.
 
 --------------------------------------------------------------------
-5. FORM NODES INSIDE THE MAIN WINDOW
-   (Expand PAGE1 → MAIN in the left tree)
-   ─────────────────────────────────────────────────────────────
+STEP 3  Global Definitions (left tree -> Global Settings -> Global Definitions)
+--------------------------------------------------------------------
+Tab: Global Data
+   Add rows:
+      Variable Name | Type Assignment | Reference Type
+      ------------- | --------------- | --------------
+      LV_VBELN      | TYPE            | VBELN
+      IT_VBAP       | TYPE            | TY_VBAP1
+      WA_VBAP       | TYPE            | TY_VBAP
 
-   ── 5a. Text node – Sales Document header ────────────────────
-   Right-click MAIN → Create → Text
-     • Name        : TEXT_VBELN
-     • Description : Sales Document header field
+Tab: Types
+   Paste this code:
 
-   In the text editor (right panel) type:
-       Sales Document: &VBELN&
+      TYPES: BEGIN OF ty_vbap,
+               vbeln TYPE vbeln_va,
+               posnr TYPE posnr_va,
+               matnr TYPE matnr,
+               matwa TYPE matwa,
+             END OF ty_vbap.
+      TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.
 
-   Use paragraph format "AS1" (or any bold format available).
+Tab: Initialization
+   Output Parameters: add IT_VBAP
+   Code:
 
-   ── 5b. Table node – Line items ──────────────────────────────
-   Right-click MAIN → Create → Table
-     • Name        : TABLE_ITEMS
-     • Description : Sales Order Line Items
+      lv_vbeln = vbeln.
+      SELECT vbeln posnr matnr matwa FROM vbap
+        INTO TABLE it_vbap
+        WHERE vbeln = lv_vbeln.
 
-   TABLE node settings:
-     Loop: check "Internal Table"
-     Internal Table   : IT_VBAP
-     Work Area        : WA_VBAP
-
-   ── 5c. Define table columns ──────────────────────────────────
-   In the TABLE node right panel → "Table" tab:
-
-   ┌─────────────────┬──────────┐
-   │ Column Name     │ Width mm │
-   ├─────────────────┼──────────┤
-   │ COL_VBELN       │   62     │
-   │ COL_POSNR       │   62     │
-   │ COL_MATNR       │   62     │
-   │ COL_MATWA       │   62     │
-   └─────────────────┴──────────┘
-
-   ── 5d. Table header row ──────────────────────────────────────
-   Expand TABLE_ITEMS → right-click "Header" → Create → Text Cell
-
-   Add one Text cell per column:
-   ┌──────────┬──────────────────┐
-   │ Column   │ Text             │
-   ├──────────┼──────────────────┤
-   │COL_VBELN │ Sales Doc        │
-   │COL_POSNR │ Item             │
-   │COL_MATNR │ Material Number  │
-   │COL_MATWA │ Material Entered │
-   └──────────┴──────────────────┘
-   Use a bold paragraph format for headers (e.g. "AS1" bold).
-
-   ── 5e. Table body / data row ─────────────────────────────────
-   Right-click "Main Area" under TABLE_ITEMS → Create → Text Cell
-
-   Add one Text cell per column using field symbols:
-   ┌──────────┬──────────────────────────────┐
-   │ Column   │ Text (field value syntax)    │
-   ├──────────┼──────────────────────────────┤
-   │COL_VBELN │ &WA_VBAP-VBELN&              │
-   │COL_POSNR │ &WA_VBAP-POSNR&              │
-   │COL_MATNR │ &WA_VBAP-MATNR&              │
-   │COL_MATWA │ &WA_VBAP-MATWA&              │
-   └──────────┴──────────────────────────────┘
+Save.
 
 --------------------------------------------------------------------
-6. ACTIVATE AND TEST
-   ─────────────────────────────────────────────────────────────
-   • Click the Activate button (Ctrl+F3) or menu Form → Activate
-   • Test via menu Form → Test / F8
-     – Enter a valid VBELN (Sales Order number) and press Execute
-   • Alternatively run report ZTEST_SF_DRIVER (transaction SE38)
-     and enter a VBELN on the selection screen.
+STEP 4  Pages and Windows
+--------------------------------------------------------------------
+The form already has %PAGE1 and a MAIN window by default.
+No changes needed at this level.
 
-====================================================================
-ADOBE FORM → SMART FORM FIELD MAPPING REFERENCE
-====================================================================
+--------------------------------------------------------------------
+STEP 5  Add a Loop node inside MAIN window
+--------------------------------------------------------------------
+1. Right-click MAIN -> Create -> Flow Logic -> Loop.
+2. Name : %LOOP1
+   Description: Items Loop
+3. Tab: Data
+      Internal Table: IT_VBAP  INTO  WA_VBAP
+4. Save.
 
-Adobe Form (ZTEST_SFP)            Smart Form (ZTEST_SF)
-─────────────────────────────     ──────────────────────────────────
-Interface Z_TEZ_ADOBE_TEST        Form Interface (inside ZTEST_SF)
-Import: VBELN TYPE VBELN          Import: VBELN TYPE VBELN
-Types TY_VBAP / TY_VBAP1          Same (Global Definitions → Types)
-Global IT_VBAP                    Global IT_VBAP + WA_VBAP
-SELECT FROM VBAP (init)           Same code (Initialization tab)
-XFA/PDF layout (base64 blob)      SAP native layout (Pages/Windows)
-Context field VBELN               TEXT_VBELN text node
-Subform BodyRow (loop IT_VBAP)    TABLE_ITEMS table node (loop)
-Subform BODY fields:              TABLE_ITEMS body cells:
-  VBELN  (62 mm, maxChars 10)       COL_VBELN  (62 mm)
-  POSNR  (62 mm, maxChars  6)       COL_POSNR  (62 mm)
-  MATNR  (62 mm, maxChars 18)       COL_MATNR  (62 mm)
-  MATWA  (62 mm, maxChars 18)       COL_MATWA  (62 mm)
-Page: 8.5x11in content 8x10.5in  Page: Letter, MAIN 203.2x266.7 mm
+--------------------------------------------------------------------
+STEP 6  Add a Text node inside the Loop
+--------------------------------------------------------------------
+1. Right-click %LOOP1 -> Create -> Text.
+2. Name : %TEXT1
+   Description: Line
+3. Text type: Text element (default).
+4. Click in the editor area on the right side, type:
 
-====================================================================
+      Sales Doc &VBELN& | Item &WA_VBAP-POSNR& - Material
+      &WA_VBAP-MATNR& (Customer Mat: &WA_VBAP-MATWA&)
+
+   Notes: variable names are wrapped in & on both sides.
+   Use the "Insert Field" button (toolbar) to insert &VBELN&, etc.,
+   so the format is preserved correctly.
+5. Save.
+
+--------------------------------------------------------------------
+STEP 7  Activate
+--------------------------------------------------------------------
+1. Press Ctrl+F3 (Activate) or click the green check icon.
+2. Status bar: "Smart form ZTEST_SF activated".
+   If errors appear, double-click the error to jump to the offending
+   node, fix, save, and re-activate.
+
+--------------------------------------------------------------------
+STEP 8  Test via the driver
+--------------------------------------------------------------------
+1. SE38 -> ZTEST_SF_DRIVER -> F8.
+2. Enter a valid sales order number (e.g. one from VA03).
+3. Print preview should show one line per VBAP item.
+
+--------------------------------------------------------------------
+DONE
+--------------------------------------------------------------------
+This manual approach bypasses all XML upload complexity and is the
+SAP-recommended way to create Smart Forms. Once activated, the
+generated function module /1BCDWB/SF<nnn> can be called from the
+driver program (already configured in ZTEST_SF_DRIVER.abap).
