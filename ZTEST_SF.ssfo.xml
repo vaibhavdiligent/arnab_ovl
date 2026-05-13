@@ -149,6 +149,15 @@
     <STANDARD>X</STANDARD>
    </item>
   </INTERFACE>
+  <GTYPES>
+   <item>TYPES: BEGIN OF ty_vbap,</item>
+   <item>         vbeln TYPE vbeln_va,</item>
+   <item>         posnr TYPE posnr_va,</item>
+   <item>         matnr TYPE matnr,</item>
+   <item>         matwa TYPE matwa,</item>
+   <item>       END OF ty_vbap.</item>
+   <item>TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.</item>
+  </GTYPES>
   <GDATA>
    <item>
     <NAME>IT_VBAP</NAME>
@@ -230,23 +239,7 @@
                       <INAME>%CODE1</INAME>
                      </NAME>
                      <CAPTION>Init</CAPTION>
-                     <PLIST>
-                      <item>
-                       <OPD>VBELN</OPD>
-                       <OUTIN>I</OUTIN>
-                      </item>
-                      <item>
-                       <OPD>IT_VBAP</OPD>
-                       <OUTIN>O</OUTIN>
-                      </item>
-                     </PLIST>
                      <CODE>
-                      <item>TYPES: BEGIN OF ty_vbap,</item>
-                      <item>         vbeln TYPE vbeln_va,</item>
-                      <item>         posnr TYPE posnr_va,</item>
-                      <item>         matnr TYPE matnr,</item>
-                      <item>         matwa TYPE matwa,</item>
-                      <item>       END OF ty_vbap.</item>
                       <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
                       <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
                      </CODE>
@@ -273,19 +266,39 @@
                       <INAME>%TEXT1</INAME>
                      </NAME>
                      <CAPTION>Header</CAPTION>
-                     <TXTYPE>TI</TXTYPE>
+                     <APPMODE>P</APPMODE>
                      <TEXT>
-                      <item>Sales Document: &amp;VBELN&amp;</item>
+                      <item>
+                       <TDFORMAT>*</TDFORMAT>
+                       <TDLINE>Sales Document: &amp;VBELN&amp;</TDLINE>
+                      </item>
                      </TEXT>
+                     <STYLE_NAME>SYSTEM</STYLE_NAME>
+                     <TEXT_AREA>
+                      <ENABLED>F</ENABLED>
+                      <NCOLS>0</NCOLS>
+                      <NROWS>0</NROWS>
+                     </TEXT_AREA>
                      <T_CAPTION>
                       <item>
                        <LANGU>E</LANGU>
                        <FORMNAME>ZTEST_SF</FORMNAME>
-                       <OBJTYPE>TX</OBJTYPE>
+                       <OBJTYPE>TI</OBJTYPE>
                        <INAME>%TEXT1</INAME>
                        <CAPTION>Header</CAPTION>
                       </item>
                      </T_CAPTION>
+                     <T_TEXT>
+                      <item>
+                       <SPRAS>E</SPRAS>
+                       <TXTYPE>F</TXTYPE>
+                       <FORMNAME>ZTEST_SF</FORMNAME>
+                       <INAME>%TEXT1</INAME>
+                       <LINENR>000001</LINENR>
+                       <TDFORMAT>*</TDFORMAT>
+                       <TDLINE>Sales Document: &amp;VBELN&amp;</TDLINE>
+                      </item>
+                     </T_TEXT>
                     </sf:TEXT>
                    </sf:OBJ>
                    <sf:SUCC/>
@@ -305,6 +318,17 @@
                      <TABNAME>IT_VBAP</TABNAME>
                      <TABHTYPE>I</TABHTYPE>
                      <TABHEADER>WA_VBAP</TABHEADER>
+                     <U_FHEIGHT>CM</U_FHEIGHT>
+                     <PATTERN>
+                      <PATTNUM>0000</PATTNUM>
+                      <FRAME>0.00</FRAME>
+                      <U_FRAME>PT</U_FRAME>
+                     </PATTERN>
+                     <U_WIDTH>CM</U_WIDTH>
+                     <U_LEFT>CM</U_LEFT>
+                     <U_TOP>CM</U_TOP>
+                     <U_SB>CM</U_SB>
+                     <U_SA>CM</U_SA>
                      <T_CAPTION>
                       <item>
                        <LANGU>E</LANGU>
@@ -326,19 +350,39 @@
                          <INAME>%TEXT2</INAME>
                         </NAME>
                         <CAPTION>Line item</CAPTION>
-                        <TXTYPE>TI</TXTYPE>
+                        <APPMODE>P</APPMODE>
                         <TEXT>
-                         <item>&amp;WA_VBAP-VBELN&amp;  &amp;WA_VBAP-POSNR&amp;  &amp;WA_VBAP-MATNR&amp;  &amp;WA_VBAP-MATWA&amp;</item>
+                         <item>
+                          <TDFORMAT>*</TDFORMAT>
+                          <TDLINE>&amp;WA_VBAP-VBELN&amp;  &amp;WA_VBAP-POSNR&amp;  &amp;WA_VBAP-MATNR&amp;  &amp;WA_VBAP-MATWA&amp;</TDLINE>
+                         </item>
                         </TEXT>
+                        <STYLE_NAME>SYSTEM</STYLE_NAME>
+                        <TEXT_AREA>
+                         <ENABLED>F</ENABLED>
+                         <NCOLS>0</NCOLS>
+                         <NROWS>0</NROWS>
+                        </TEXT_AREA>
                         <T_CAPTION>
                          <item>
                           <LANGU>E</LANGU>
                           <FORMNAME>ZTEST_SF</FORMNAME>
-                          <OBJTYPE>TX</OBJTYPE>
+                          <OBJTYPE>TI</OBJTYPE>
                           <INAME>%TEXT2</INAME>
                           <CAPTION>Line item</CAPTION>
                          </item>
                         </T_CAPTION>
+                        <T_TEXT>
+                         <item>
+                          <SPRAS>E</SPRAS>
+                          <TXTYPE>F</TXTYPE>
+                          <FORMNAME>ZTEST_SF</FORMNAME>
+                          <INAME>%TEXT2</INAME>
+                          <LINENR>000001</LINENR>
+                          <TDFORMAT>*</TDFORMAT>
+                          <TDLINE>&amp;WA_VBAP-VBELN&amp;  &amp;WA_VBAP-POSNR&amp;  &amp;WA_VBAP-MATNR&amp;  &amp;WA_VBAP-MATWA&amp;</TDLINE>
+                         </item>
+                        </T_TEXT>
                        </sf:TEXT>
                       </sf:OBJ>
                       <sf:SUCC/>
@@ -352,6 +396,84 @@
               </sf:PROC_CTRL>
              </sf:WINDOW>
             </sf:OBJ>
+            <sf:OUTATTR>
+             <sf:OUTATTR>
+              <NAME>
+               <INAME>%OUTATTRIB1</INAME>
+              </NAME>
+              <CAPTION>New Display Option</CAPTION>
+              <U_WFRAME>PT</U_WFRAME>
+              <U_WBOXV>CM</U_WBOXV>
+              <U_WBOXH>CM</U_WBOXH>
+              <WLEFT>0.635</WLEFT>
+              <U_WLEFT>CM</U_WLEFT>
+              <WWIDTH>20.32</WWIDTH>
+              <U_WWIDTH>CM</U_WWIDTH>
+              <WTOP>0.635</WTOP>
+              <U_WTOP>CM</U_WTOP>
+              <WHEIGHT>26.67</WHEIGHT>
+              <U_WHEIGHT>CM</U_WHEIGHT>
+              <BORDER>
+               <LEFTATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </LEFTATTR>
+               <TOPATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </TOPATTR>
+               <RIGHTATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </RIGHTATTR>
+               <BOTTOMATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </BOTTOMATTR>
+              </BORDER>
+              <T_CAPTION>
+               <item>
+                <LANGU>E</LANGU>
+                <FORMNAME>ZTEST_SF</FORMNAME>
+                <OBJTYPE>OA</OBJTYPE>
+                <INAME>%OUTATTRIB1</INAME>
+                <CAPTION>New Display Option</CAPTION>
+               </item>
+              </T_CAPTION>
+             </sf:OUTATTR>
+            </sf:OUTATTR>
             <sf:SUCC/>
            </sf:NODE>
           </sf:item>

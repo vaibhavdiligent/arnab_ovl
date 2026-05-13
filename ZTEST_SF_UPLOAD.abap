@@ -227,9 +227,15 @@ START-OF-SELECTION.
         mode                = 'INSERT'
         formname            = lv_formname ).
 
+      " abapGit passes the OUTER root element (the <abapGit> wrapper or
+      " whatever the document root is), NOT the inner <sf:SMARTFORM>.
+      " Passing the inner element causes xml_upload to misread the form
+      " structure (duplicate CODE nodes, loop not recognised as Internal
+      " Table, etc.) because some sections live as siblings of sf:SMARTFORM
+      " in the abapGit-style document. See zabapgit_standalone deserialize.
       lo_sf->xml_upload(
         EXPORTING
-          dom      = lo_smartform_el
+          dom      = lo_root
           formname = lv_formname
           language = p_lang
         CHANGING
