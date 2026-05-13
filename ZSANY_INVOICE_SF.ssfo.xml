@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SSFO" serializer_version="v1.0.0">
+ <sf:SMARTFORM xmlns:sf="urn:sap-com:SmartForms:2000:internal-structure" xmlns="urn:sap-com:sdixml-ifr:2000">
+  <HEADER>
+   <FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+   <CAPTION>Sany Invoice (from Adobe Form)</CAPTION>
+   <MASTERLANG>E</MASTERLANG>
+   <LANGVECTOR>*</LANGVECTOR>
+   <DEVCLASS></DEVCLASS>
+   <VERSION>00001</VERSION>
+   <FIRSTUSER>DUMMY</FIRSTUSER>
+   <FIRSTDATE>2026-05-13</FIRSTDATE>
+   <FIRSTTIME>10:00:00</FIRSTTIME>
+   <LASTUSER>DUMMY</LASTUSER>
+   <LASTDATE></LASTDATE>
+   <LASTTIME></LASTTIME>
+  </HEADER>
+  <INTERFACE>
+   <item>
+    <IOTYPE>E</IOTYPE>
+    <NAME>DOCUMENT_OUTPUT_INFO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SSFCRESPD</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>E</IOTYPE>
+    <NAME>JOB_OUTPUT_INFO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SSFCRESCL</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>E</IOTYPE>
+    <NAME>JOB_OUTPUT_OPTIONS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SSFCRESOP</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>ARCHIVE_INDEX</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TOA_DARA</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>ARCHIVE_INDEX_TAB</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TSFDARA</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>ARCHIVE_PARAMETERS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ARC_PARAMS</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>CONTROL_PARAMETERS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SSFCTRLOP</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>MAIL_APPL_OBJ</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SWOTOBJID</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>MAIL_RECIPIENT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SWOTOBJID</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>MAIL_SENDER</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SWOTOBJID</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>OUTPUT_OPTIONS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SSFCOMPOP</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>USER_SETTINGS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TDBOOL</TYPENAME>
+    <OPTIONAL>X</OPTIONAL>
+    <BYVALUE>X</BYVALUE>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>LV_STR</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>I_VBELN</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP-VBELN</TYPENAME>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>I_VGBEL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP-VGBEL</TYPENAME>
+   </item>
+   <item>
+    <IOTYPE>I</IOTYPE>
+    <NAME>I_AUBEL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP-AUBEL</TYPENAME>
+   </item>
+   <item>
+    <IOTYPE>X</IOTYPE>
+    <NAME>FORMATTING_ERROR</NAME>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>X</IOTYPE>
+    <NAME>INTERNAL_ERROR</NAME>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>X</IOTYPE>
+    <NAME>SEND_ERROR</NAME>
+    <STANDARD>X</STANDARD>
+   </item>
+   <item>
+    <IOTYPE>X</IOTYPE>
+    <NAME>USER_CANCELED</NAME>
+    <STANDARD>X</STANDARD>
+   </item>
+  </INTERFACE>
+  <GTYPES>
+   <item>*types: IT_VBRK  TYPE TABLE OF VBRK,</item>
+   <item>*  IT_VBRP  TYPE TABLE OF VBRP,</item>
+   <item>*       IT_VBAP  TYPE TABLE OF VBAP,</item>
+   <item>*       IT_VBAK  TYPE TABLE OF VBAK,</item>
+   <item>*       IT_LIKP  TYPE TABLE OF LIKP,</item>
+   <item>*       IT_KONV  TYPE TABLE OF KONV,</item>
+   <item>*       ITJ_1IMOCUST  TYPE TABLE OF J_1IMOCUST,</item>
+   <item>*       IT_OBJK  TYPE TABLE OF OBJK,</item>
+   <item>*       IT_EKKO  TYPE TABLE OF EKKO,</item>
+   <item>*       IT_EKPO  TYPE TABLE OF EKPO,</item>
+   <item>*       IT_VBPA  TYPE TABLE OF VBPA,</item>
+   <item>*       IT_VBPA1  TYPE TABLE OF VBPA,</item>
+   <item>*       ITJ_1IMOCUST1  TYPE TABLE OF J_1IMOCUST,</item>
+   <item>*       LT_VBPA  TYPE TABLE OF VBPA.</item>
+   <item>***********</item>
+   <item>*types : begin of vbrk_1,</item>
+   <item>*  vkorg type vbrk-vkorg,</item>
+   <item>*  vtweg type vbrk-vtweg,</item>
+   <item>*  kunrg type vbrk-kunrg,</item>
+   <item>*end of vbrk_1.</item>
+   <item>types : it_vbrk_1 type TABLE OF vbrk.</item>
+   <item>TYPES : BEGIN OF TY_BILL ,</item>
+   <item>     NAME1 TYPE ADRC-NAME1 ,</item>
+   <item>     NAME2 TYPE ADRC-NAME2 ,</item>
+   <item>     NAME_CO TYPE ADRC-NAME_CO,                        &quot;added by Niranjan Shinde 14.12.2021.</item>
+   <item>       STREET TYPE ADRC-STREET ,</item>
+   <item>       STR_SUPPL2 TYPE ADRC-STR_SUPPL2 ,</item>
+   <item>       STR_SUPPL3 TYPE ADRC-STR_SUPPL3 ,</item>
+   <item>       CITY1 TYPE ADRC-CITY1 ,</item>
+   <item>       POST_CODE1 TYPE ADRC-POST_CODE1 ,</item>
+   <item>       TEL_NUMBER  TYPE ADRC-TEL_NUMBER ,</item>
+   <item>       STR_SUPPL1  TYPE ADRC-STR_SUPPL1,</item>
+   <item>       LOCATION  TYPE ADRC-LOCATION,                    &quot;added by Niranjan Shinde 07.12.2021</item>
+   <item>      END OF TY_BILL .</item>
+   <item>types : tt_bill1 TYPE TABLE OF ty_bill .</item>
+   <item>types: TT_VBRK  TYPE TABLE OF VBRK,</item>
+   <item>       TT_VBRP  TYPE TABLE OF VBRP,</item>
+   <item>       TT_VBAP  TYPE TABLE OF VBAP,</item>
+   <item>       TT_VBAK  TYPE TABLE OF VBAK,</item>
+   <item>       TT_LIKP  TYPE TABLE OF LIKP,</item>
+   <item>       TT_KONV  TYPE TABLE OF KONV,</item>
+   <item>       TTJ_1IMOCUST  TYPE TABLE OF J_1IMOCUST,</item>
+   <item>       TT_OBJK  TYPE TABLE OF OBJK,</item>
+   <item>       TT_EKKO  TYPE TABLE OF EKKO,</item>
+   <item>       TT_EKPO  TYPE TABLE OF EKPO,</item>
+   <item>       TT_VBPA  TYPE TABLE OF VBPA.</item>
+   <item>types : begin of ty_text ,</item>
+   <item>        text type string ,</item>
+   <item>        ind  type c ,</item>
+   <item>        end of ty_text .</item>
+   <item>types :tt_text TYPE TABLE OF ty_text .</item>
+   <item>TYPES : begin of ST_FINAL,</item>
+   <item>       C_SR_NO TYPE STRING ,</item>
+   <item>       SR_NO TYPE I,</item>
+   <item>       SERIAL TYPE STRING ,</item>
+   <item>       matnr TYPE vbrp-matnr,</item>
+   <item>       arktx TYPE vbrp-arktx,</item>
+   <item>       I_SERNR TYPE string,</item>
+   <item>       DESC TYPE  string,</item>
+   <item>       descp(1000) type c ,                   &quot;*****&amp;wa_vbrp-matnr&amp; / &amp;wa_vbrp-arktx(C)&amp; &amp;I_SERNR(C)&amp;</item>
+   <item>       VCBC TYPE STRING,                       &quot;*******VCBC               : &amp;I_VCBC(C)&amp;                     CONDITION I_FKART = &apos;ZM72&apos;     I_VCBC NE &apos; &apos;</item>
+   <item>       VCBC_DESC TYPE STRING,                 &quot;********VCBC Description   : &amp;I_VCBC_DESC(C)&amp;              CONDITION I_FKART = &apos;ZM72&apos;     I_VCBC_DESC NE &apos; &apos;</item>
+   <item>       I_CHALLAN_NO TYPE STRING,              &quot;********Challan No.        : &amp;I_CHALLAN_NO&amp;         CONDITION I_FKART = &apos;ZM72&apos;      I_CHALLAN_NO NE &apos; &apos;</item>
+   <item>       I_CHALLAN_DATE TYPE STRING,            &quot;********Challan Date       : &amp;I_CHALLAN_DATE(C)&amp;   CONDITION I_FKART = &apos;ZM72&apos;      I_CHALLAN_DATE NE &apos; &apos;</item>
+   <item>       I_BODY_SERNO TYPE STRING,               &quot;********Body Serial No.    : &amp;I_BODY_SERNO(C)&amp;                CONDITION I_FKART = &apos;ZM72&apos;      I_CHALLAN_DATE NE &apos; &apos;</item>
+   <item>       I_CHASIS_NO TYPE STRING,                &quot;*********Chassis No.        : &amp;I_CHASSIS_NO(C)&amp;               CONDITION I_FKART = &apos;ZM72&apos;      I_CHASSIS_NO NE &apos; &apos;</item>
+   <item>       I_ENGINE_NO TYPE STRING,               &quot;*********Engine No.         : &amp;I_ENGINE_NO(C)&amp;                CONDITION I_FKART = &apos;ZM72&apos;      I_ENGINE_NO NE &apos; &apos;</item>
+   <item>       HSC_CODE TYPE MARC-STEUC,              &quot;*******hsn_sac</item>
+   <item>       quantity type vbrp-FKLMG,              &quot;*******wa_vbrp-FKLMG(C)</item>
+   <item>       unit type vbrp-meins,                  &quot;****&amp;wa_vbrp-meins(C)&amp;</item>
+   <item>       rate TYPE P DECIMALS 2,                          &quot;***&amp;rate(C)&amp;</item>
+   <item>       tot_amt type P DECIMALS 2,          &quot;******&amp;total(C)&amp;</item>
+   <item>       kdmat type knmt-kdmat,</item>
+   <item>     END OF ST_FINAL.</item>
+   <item>types : TT_FINAL TYPE TABLE OF ST_FINAL.</item>
+  </GTYPES>
+  <GDATA>
+   <item>
+    <NAME>LV_BEZEI</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>T005U-BEZEI</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_LINE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 50</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_LINE1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 255</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_INCO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 50</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_INCO1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBKD-INCO1</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_INCO2</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBKD-INCO2</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_INCOTERM</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBKD-INCO2</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_DESCRIP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_KSCHL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KONV-KSCHL</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_QR</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ZAGST_B2C_QR_INV_DATA</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBRK_11</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRK</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBRK_11</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>IT_VBRK_1</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_KDMAT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KNMT-KDMAT</TYPENAME>
+   </item>
+   <item>
+    <NAME>IGST_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>CHAR20</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBRK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBRK</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBAP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBAP</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBAK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBAK</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_LIKP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_LIKP</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_KONV</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_KONV</TYPENAME>
+   </item>
+   <item>
+    <NAME>ITJ_1IMOCUST</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TTJ_1IMOCUST</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_OBJK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_OBJK</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_EKKO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_EKKO</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_EKPO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_EKPO</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBPA</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBPA1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>ITJ_1IMOCUST1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TTJ_1IMOCUST</TYPENAME>
+   </item>
+   <item>
+    <NAME>LT_VBPA</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_VBRP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_VBRP</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_FINAL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_FINAL</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_OBJK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>OBJK</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_SERNR</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>TCS_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 3</TYPENAME>
+   </item>
+   <item>
+    <NAME>TCS_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_EKKO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>EKKO</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_EKPO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>EKPO</TYPENAME>
+   </item>
+   <item>
+    <NAME>CHASSIS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>ENGINE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBPA</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>K007_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>K007_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>ZINT_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>ZINT_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_J_1IPANNO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>J_1IMOCUST-J_1IPANNO</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBPA1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>WAJ_1IMOCUST1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>J_1IMOCUST</TYPENAME>
+   </item>
+   <item>
+    <NAME>LS_T005U</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>T005U</TYPENAME>
+   </item>
+   <item>
+    <NAME>LS_VBPA</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBPA</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_KNVV</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KNVV</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_VCBC</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_VCBC_DESC</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_CHALLAN_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_CHALLAN_DATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_BODY_SERNO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_CHASSIS_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_ENGINE_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_FKART</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRK-FKART</TYPENAME>
+   </item>
+   <item>
+    <NAME>F_TOTAL_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>IGST_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>CGST_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>ZF01_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>SGST_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>IGST_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>CGST_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>ZF01_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>SGST_VALU</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>IGST_VALU_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>CGST_VALU_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>ZF01_VALU_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>SGST_VALU_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_IGST</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>G_TOTAL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>G_TOT_TEXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 100</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_PAGE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>C LENGTH 30</TYPENAME>
+   </item>
+   <item>
+    <NAME>I_HYPO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_ADR6</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADR6</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_ADR7</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADR6</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_SER01</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>SER01</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBRK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRK</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBRP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBAP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBAP</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_VBAK</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBAK</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_LIKP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>LIKP</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_T001W</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>T001W</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_PLANT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_BILLP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_SHIPT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC</TYPENAME>
+   </item>
+   <item>
+    <NAME>WAJ_1BBRANCH</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>J_1BBRANCH</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_KNA1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KNA1</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_KNA2</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KNA1</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_T005U</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>T005U</TYPENAME>
+   </item>
+   <item>
+    <NAME>SR_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>I</TYPENAME>
+   </item>
+   <item>
+    <NAME>HSN_SAC</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>MARC-STEUC</TYPENAME>
+   </item>
+   <item>
+    <NAME>TOTAL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_KONV</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>KONV</TYPENAME>
+   </item>
+   <item>
+    <NAME>WAJ_1IMOCUST</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>J_1IMOCUST</TYPENAME>
+   </item>
+   <item>
+    <NAME>RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>F_TOTAL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_PO_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBKD-BSTKD</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_PO_DATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>EKKO-AEDAT</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_DEL_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP-VGBEL</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_INV_NO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBAK-VBELN</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_INVOICE_DATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRK-FKDAT</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_SHIPPED_TO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_BILLED_TO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_DISP_FROM</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>DISC_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>ACCESS_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>IGST_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>CGST_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>SGST_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>TCS_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>INTREST_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LOGO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>XSTRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>FRIEGHT_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_ORDER_DATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBAK-BSTDK</TYPENAME>
+   </item>
+   <item>
+    <NAME>WAERS</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>WAERS</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_ORDER</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>VBRP-AUBEL</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_IGST</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_NAME1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-NAME1</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_SUP1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-STR_SUPPL1</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_SUP2</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-STR_SUPPL2</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_SUP3</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-STR_SUPPL3</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_CITY1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-CITY1</TYPENAME>
+   </item>
+   <item>
+    <NAME>DP_POST_CODE1</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADRC-POST_CODE1</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_BILL_TO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_BILL</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_SHIP_TO</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_BILL</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_EMAIL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ADR6-SMTP_ADDR</TYPENAME>
+   </item>
+   <item>
+    <NAME>ACC_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME> P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>TOT_ACC_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME> P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_TEXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>IT_TEXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_BILL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>TT_BILL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_BILL</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_SHIP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>TT_SHIP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_SHIP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>WA_DP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TY_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>TT_DP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>TT_TEXT</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_DP</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>GS_ZEYDIGI_EINV_AZR</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>ZEYDIGI_EINV_AZR</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_QRCODE2</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>GV_QCODE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>XSTRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC1_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 3</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC1_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC2_RATE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 3</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC2_VALUE</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>P DECIMALS 2</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC1_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>JTC2_TXT</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_DECLARATION</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>STRING</TYPENAME>
+   </item>
+   <item>
+    <NAME>LV_AUART</NAME>
+    <TYPING>TYPE</TYPING>
+    <TYPENAME>AUART</TYPENAME>
+   </item>
+  </GDATA>
+  <sf:VARHEADER>
+   <sf:item>
+    <PAGEFORMAT>LETTER</PAGEFORMAT>
+    <CPI>10.00</CPI>
+    <LPI>6.00</LPI>
+    <STDSTYLE>SYSTEM</STDSTYLE>
+    <sf:PAGETREE>
+     <sf:NODE>
+      <NODETYPE>RP</NODETYPE>
+      <sf:SUCC>
+       <sf:item>
+        <sf:NODE>
+         <NODETYPE>PA</NODETYPE>
+         <sf:OBJ>
+          <sf:PAGE>
+           <NAME><INAME>%PAGE1</INAME></NAME>
+           <CAPTION>Invoice Page</CAPTION>
+           <NEXTPAGE><INAME>%PAGE1</INAME></NEXTPAGE>
+           <NUMB_MODE>I</NUMB_MODE>
+           <NUMB_TYPE>A</NUMB_TYPE>
+           <PAGEORTN>P</PAGEORTN>
+           <T_CAPTION><item>
+             <LANGU>E</LANGU><FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+             <OBJTYPE>PA</OBJTYPE><INAME>%PAGE1</INAME><CAPTION>Invoice Page</CAPTION>
+            </item></T_CAPTION>
+          </sf:PAGE>
+         </sf:OBJ>
+         <sf:SUCC>
+          <sf:item>
+           <sf:NODE>
+            <NODETYPE>WI</NODETYPE>
+            <sf:OBJ>
+             <sf:WINDOW>
+              <NAME><INAME>MAIN</INAME></NAME>
+              <CAPTION>Main Window</CAPTION>
+              <WTYPE>M</WTYPE>
+              <T_CAPTION><item>
+                <LANGU>E</LANGU><FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+                <OBJTYPE>WI</OBJTYPE><INAME>MAIN</INAME><CAPTION>Main Window</CAPTION>
+               </item></T_CAPTION>
+              <sf:PROC_CTRL>
+               <sf:NODE>
+                <NODETYPE>RC</NODETYPE>
+                <sf:SUCC>
+                 <sf:item>
+                  <sf:NODE>
+                   <NODETYPE>SE</NODETYPE>
+                   <sf:OBJ><sf:SECTION>
+                    <NAME><INAME>%LOOP1</INAME></NAME>
+                    <CAPTION>Invoice Line Items</CAPTION>
+                    <SECTTYPE>L</SECTTYPE>
+                    <DATATYPE>L</DATATYPE>
+                    <TABNAME>IT_FINAL</TABNAME>
+                    <TABHTYPE>I</TABHTYPE>
+                    <TABHEADER>WA_FINAL</TABHEADER>
+                    <U_FHEIGHT>CM</U_FHEIGHT>
+                    <PATTERN><PATTNUM>0000</PATTNUM><FRAME>0.00</FRAME><U_FRAME>PT</U_FRAME></PATTERN>
+                    <U_WIDTH>CM</U_WIDTH><U_LEFT>CM</U_LEFT><U_TOP>CM</U_TOP>
+                    <U_SB>CM</U_SB><U_SA>CM</U_SA>
+                    <T_CAPTION><item>
+                      <LANGU>E</LANGU><FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+                      <OBJTYPE>SE</OBJTYPE><INAME>%LOOP1</INAME><CAPTION>Invoice Line Items</CAPTION>
+                     </item></T_CAPTION>
+                   </sf:SECTION></sf:OBJ>
+                   <sf:SUCC>
+                    <sf:item>
+                     <sf:NODE>
+                      <NODETYPE>TI</NODETYPE>
+                      <sf:OBJ><sf:TEXT>
+                       <NAME><INAME>%TEXT1</INAME></NAME>
+                       <CAPTION>Line</CAPTION>
+                       <APPMODE>P</APPMODE>
+                       <TEXT><item><TDFORMAT>*</TDFORMAT><TDLINE>Sr &amp;WA_FINAL-C_SR_NO&amp; | HSN &amp;WA_FINAL-HSN&amp; | Material &amp;WA_FINAL-MATNR&amp; | Qty &amp;WA_FINAL-MENGE&amp; | Rate &amp;WA_FINAL-NETPR&amp; | Total &amp;WA_FINAL-NETWR&amp;</TDLINE></item></TEXT>
+                       <STYLE_NAME>SYSTEM</STYLE_NAME>
+                       <TEXT_AREA><ENABLED>F</ENABLED><NCOLS>0</NCOLS><NROWS>0</NROWS></TEXT_AREA>
+                       <T_CAPTION><item>
+                         <LANGU>E</LANGU><FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+                         <OBJTYPE>TI</OBJTYPE><INAME>%TEXT1</INAME><CAPTION>Line</CAPTION>
+                        </item></T_CAPTION>
+                       <T_TEXT><item>
+                         <SPRAS>E</SPRAS><TXTYPE>F</TXTYPE><FORMNAME>ZSANY_INVOICE_SF</FORMNAME>
+                         <INAME>%TEXT1</INAME><LINENR>000001</LINENR>
+                         <TDFORMAT>*</TDFORMAT><TDLINE>Sr &amp;WA_FINAL-C_SR_NO&amp; | HSN &amp;WA_FINAL-HSN&amp; | Material &amp;WA_FINAL-MATNR&amp; | Qty &amp;WA_FINAL-MENGE&amp; | Rate &amp;WA_FINAL-NETPR&amp; | Total &amp;WA_FINAL-NETWR&amp;</TDLINE>
+                        </item></T_TEXT>
+                      </sf:TEXT></sf:OBJ>
+                      <sf:SUCC/>
+                     </sf:NODE>
+                    </sf:item>
+                   </sf:SUCC>
+                  </sf:NODE>
+                 </sf:item>
+                </sf:SUCC>
+               </sf:NODE>
+              </sf:PROC_CTRL>
+             </sf:WINDOW>
+            </sf:OBJ>
+            <sf:OUTATTR><sf:OUTATTR>
+             <NAME><INAME>%OUTATTRIB1</INAME></NAME>
+             <CAPTION>Main Window Geometry</CAPTION>
+             <U_WFRAME>PT</U_WFRAME><U_WBOXV>CM</U_WBOXV><U_WBOXH>CM</U_WBOXH>
+             <WLEFT>1.0</WLEFT><U_WLEFT>CM</U_WLEFT>
+             <WWIDTH>19.0</WWIDTH><U_WWIDTH>CM</U_WWIDTH>
+             <WTOP>1.0</WTOP><U_WTOP>CM</U_WTOP>
+             <WHEIGHT>25.0</WHEIGHT><U_WHEIGHT>CM</U_WHEIGHT>
+             <BORDER>
+              <LEFTATTR><THICKNESS>0.00</THICKNESS><THICKNESSU>PT</THICKNESSU><DISTANCE>0.00</DISTANCE><DISTANCEU>CM</DISTANCEU><COLOR><RED>000</RED><GREEN>000</GREEN><BLUE>000</BLUE><TRANS>000</TRANS></COLOR></LEFTATTR>
+              <TOPATTR><THICKNESS>0.00</THICKNESS><THICKNESSU>PT</THICKNESSU><DISTANCE>0.00</DISTANCE><DISTANCEU>CM</DISTANCEU><COLOR><RED>000</RED><GREEN>000</GREEN><BLUE>000</BLUE><TRANS>000</TRANS></COLOR></TOPATTR>
+              <RIGHTATTR><THICKNESS>0.00</THICKNESS><THICKNESSU>PT</THICKNESSU><DISTANCE>0.00</DISTANCE><DISTANCEU>CM</DISTANCEU><COLOR><RED>000</RED><GREEN>000</GREEN><BLUE>000</BLUE><TRANS>000</TRANS></COLOR></RIGHTATTR>
+              <BOTTOMATTR><THICKNESS>0.00</THICKNESS><THICKNESSU>PT</THICKNESSU><DISTANCE>0.00</DISTANCE><DISTANCEU>CM</DISTANCEU><COLOR><RED>000</RED><GREEN>000</GREEN><BLUE>000</BLUE><TRANS>000</TRANS></COLOR></BOTTOMATTR>
+             </BORDER>
+             <T_CAPTION><item><LANGU>E</LANGU><FORMNAME>ZSANY_INVOICE_SF</FORMNAME><OBJTYPE>OA</OBJTYPE><INAME>%OUTATTRIB1</INAME><CAPTION>Main Window Geometry</CAPTION></item></T_CAPTION>
+            </sf:OUTATTR></sf:OUTATTR>
+            <sf:SUCC/>
+           </sf:NODE>
+          </sf:item>
+         </sf:SUCC>
+        </sf:NODE>
+       </sf:item>
+      </sf:SUCC>
+     </sf:NODE>
+    </sf:PAGETREE>
+   </sf:item>
+  </sf:VARHEADER>
+ </sf:SMARTFORM>
+</abapGit>
