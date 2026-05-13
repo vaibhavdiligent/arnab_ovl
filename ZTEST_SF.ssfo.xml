@@ -210,14 +210,6 @@
           <sf:item>
            <sf:NODE>
             <NODETYPE>WI</NODETYPE>
-            <WLEFT>0.635</WLEFT>
-            <U_WLEFT>CM</U_WLEFT>
-            <WTOP>0.635</WTOP>
-            <U_WTOP>CM</U_WTOP>
-            <WWIDTH>20.32</WWIDTH>
-            <U_WWIDTH>CM</U_WWIDTH>
-            <WHEIGHT>26.67</WHEIGHT>
-            <U_WHEIGHT>CM</U_WHEIGHT>
             <sf:OBJ>
              <sf:WINDOW>
               <NAME>
@@ -363,6 +355,84 @@
               </sf:PROC_CTRL>
              </sf:WINDOW>
             </sf:OBJ>
+            <sf:OUTATTR>
+             <sf:OUTATTR>
+              <NAME>
+               <INAME>%OUTATTRIB1</INAME>
+              </NAME>
+              <CAPTION>New Display Option</CAPTION>
+              <U_WFRAME>PT</U_WFRAME>
+              <U_WBOXV>CM</U_WBOXV>
+              <U_WBOXH>CM</U_WBOXH>
+              <WLEFT>0.635</WLEFT>
+              <U_WLEFT>CM</U_WLEFT>
+              <WWIDTH>20.32</WWIDTH>
+              <U_WWIDTH>CM</U_WWIDTH>
+              <WTOP>0.635</WTOP>
+              <U_WTOP>CM</U_WTOP>
+              <WHEIGHT>26.67</WHEIGHT>
+              <U_WHEIGHT>CM</U_WHEIGHT>
+              <BORDER>
+               <LEFTATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </LEFTATTR>
+               <TOPATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </TOPATTR>
+               <RIGHTATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </RIGHTATTR>
+               <BOTTOMATTR>
+                <THICKNESS>0.00</THICKNESS>
+                <THICKNESSU>PT</THICKNESSU>
+                <DISTANCE>0.00</DISTANCE>
+                <DISTANCEU>CM</DISTANCEU>
+                <COLOR>
+                 <RED>000</RED>
+                 <GREEN>000</GREEN>
+                 <BLUE>000</BLUE>
+                 <TRANS>000</TRANS>
+                </COLOR>
+               </BOTTOMATTR>
+              </BORDER>
+              <T_CAPTION>
+               <item>
+                <LANGU>E</LANGU>
+                <FORMNAME>ZTEST_SF</FORMNAME>
+                <OBJTYPE>OA</OBJTYPE>
+                <INAME>%OUTATTRIB1</INAME>
+                <CAPTION>New Display Option</CAPTION>
+               </item>
+              </T_CAPTION>
+             </sf:OUTATTR>
+            </sf:OUTATTR>
             <sf:SUCC/>
            </sf:NODE>
           </sf:item>
