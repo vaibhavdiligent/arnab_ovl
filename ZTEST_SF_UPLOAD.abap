@@ -146,7 +146,7 @@ START-OF-SELECTION.
     RETURN.
   ENDIF.
 
-* ── 3. Locate <sf:SMARTFORM> element (skip <abapGit> wrapper) ──────────
+* ── 3. Locate <sf:SMARTFORM> element (to extract FORMNAME only) ────────
   IF lo_root->get_name( ) CS 'SMARTFORM'.
     lo_smartform_el = lo_root.
   ELSE.
@@ -192,30 +192,27 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
-* ── 5. Clear leftover EDTFLAG / DELFLAG on the TADIR entry ─────────────
-  " A previous broken run with IV_SET_EDTFLAG='X' persisted EDTFLAG='X'
-  " in TADIR.  TR_TADIR_INTERFACE with IV_SET_EDTFLAG=' ' does NOT
-  " reliably unset that flag — only direct UPDATE does.  Without this,
-  " every subsequent upload raises:
-  "   "You cannot edit object R3TR SSFO ZTEST_SF with the standard editor"
-  DATA: lv_tadir_obj_name TYPE sobj_name,
-        ls_tadir          TYPE tadir.
+* ── 5. Pre-delete existing form for a guaranteed clean re-upload ────────
+*   Stale rows in STXFADM from a previous broken upload are NOT fully
+*   replaced by xml_upload + store (store does UPSERT, not DELETE+INSERT).
+*   Deleting here ensures the subsequent INSERT starts with an empty slate.
+  DATA: lv_tadir_obj_name TYPE sobj_name.
   lv_tadir_obj_name = lv_formname.
 
-  SELECT SINGLE * FROM tadir INTO ls_tadir
+  DELETE FROM stxfadm WHERE formname = lv_formname.
+  IF sy-subrc = 0.
+    WRITE: / 'Purged stale STXFADM rows for', lv_formname.
+  ENDIF.
+
+  DELETE FROM tadir
     WHERE pgmid    = 'R3TR'
       AND object   = 'SSFO'
       AND obj_name = lv_tadir_obj_name.
-
-  IF sy-subrc = 0 AND ( ls_tadir-edtflag = 'X' OR ls_tadir-delflag = 'X' ).
-    UPDATE tadir SET edtflag = ' '
-                     delflag = ' '
-      WHERE pgmid    = 'R3TR'
-        AND object   = 'SSFO'
-        AND obj_name = lv_tadir_obj_name.
-    COMMIT WORK.
-    WRITE: / 'Cleared stale EDTFLAG/DELFLAG on TADIR entry for', lv_formname.
+  IF sy-subrc = 0.
+    WRITE: / 'Purged stale TADIR entry for', lv_formname.
   ENDIF.
+
+  COMMIT WORK.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
@@ -227,12 +224,11 @@ START-OF-SELECTION.
         mode                = 'INSERT'
         formname            = lv_formname ).
 
-      " abapGit passes the OUTER root element (the <abapGit> wrapper or
-      " whatever the document root is), NOT the inner <sf:SMARTFORM>.
-      " Passing the inner element causes xml_upload to misread the form
-      " structure (duplicate CODE nodes, loop not recognised as Internal
-      " Table, etc.) because some sections live as siblings of sf:SMARTFORM
-      " in the abapGit-style document. See zabapgit_standalone deserialize.
+      " Pass the OUTER document root (the <abapGit> wrapper, or the
+      " document root when there is no wrapper).  abapGit itself does:
+      "   io_xml->get_raw()->get_root_element()
+      " which returns the <abapGit> element.  Passing the inner
+      " <sf:SMARTFORM> causes xml_upload to misread the tree structure.
       lo_sf->xml_upload(
         EXPORTING
           dom      = lo_root
