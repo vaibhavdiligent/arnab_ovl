@@ -192,27 +192,45 @@ START-OF-SELECTION.
 
   WRITE: / 'Form name from XML:', lv_formname.
 
-* ── 5. Pre-delete existing form for a guaranteed clean re-upload ────────
-*   Stale rows in STXFADM from a previous broken upload are NOT fully
-*   replaced by xml_upload + store (store does UPSERT, not DELETE+INSERT).
-*   Deleting here ensures the subsequent INSERT starts with an empty slate.
-  DATA: lv_tadir_obj_name TYPE sobj_name.
+* ── 5. Pre-delete existing form via FB_DELETE_FORM ─────────────────────
+*   abapGit uses FB_DELETE_FORM to remove a Smart Form (see
+*   ZCL_ABAPGIT_OBJECT_SSFO->delete).  This function module cleanly
+*   removes the form across ALL Smart Forms tables (STXFADM, STXFOBJ,
+*   text tables, etc.) — direct SQL on STXFADM alone leaves orphan
+*   node rows that cause the next upload to produce duplicate nodes.
+  DATA: lv_tadir_obj_name TYPE sobj_name,
+        lv_form_check     TYPE stxfadm-formname.
   lv_tadir_obj_name = lv_formname.
 
-  DELETE FROM stxfadm WHERE formname = lv_formname.
-  IF sy-subrc = 0.
-    WRITE: / 'Purged stale STXFADM rows for', lv_formname.
-  ENDIF.
+  SELECT SINGLE formname FROM stxfadm INTO lv_form_check
+    WHERE formname = lv_formname.
 
-  DELETE FROM tadir
-    WHERE pgmid    = 'R3TR'
-      AND object   = 'SSFO'
-      AND obj_name = lv_tadir_obj_name.
   IF sy-subrc = 0.
-    WRITE: / 'Purged stale TADIR entry for', lv_formname.
+    WRITE: / 'Form', lv_formname, 'already exists – deleting via FB_DELETE_FORM.'.
+    CALL FUNCTION 'FB_DELETE_FORM'
+      EXPORTING
+        i_formname            = lv_formname
+        i_with_dialog         = abap_false
+        i_with_confirm_dialog = abap_false
+      EXCEPTIONS
+        no_form               = 1
+        OTHERS                = 2.
+    IF sy-subrc = 0.
+      WRITE: / '  FB_DELETE_FORM succeeded.'.
+    ELSE.
+      WRITE: / '  FB_DELETE_FORM returned sy-subrc =', sy-subrc,
+               '– falling back to direct table cleanup.'.
+      DELETE FROM stxfadm WHERE formname = lv_formname.
+    ENDIF.
+    " Always also clear the TADIR entry so INSERT mode is unambiguous
+    DELETE FROM tadir
+      WHERE pgmid    = 'R3TR'
+        AND object   = 'SSFO'
+        AND obj_name = lv_tadir_obj_name.
+    COMMIT WORK.
+  ELSE.
+    WRITE: / 'No existing form – proceeding directly to INSERT.'.
   ENDIF.
-
-  COMMIT WORK.
 
 * ── 6. Upload via CL_SSF_FB_SMART_FORM (same calls as abapGit) ─────────
   CREATE OBJECT lo_sf.
