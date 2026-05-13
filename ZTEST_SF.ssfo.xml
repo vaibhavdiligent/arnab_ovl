@@ -170,6 +170,10 @@
     <TYPENAME>TY_VBAP</TYPENAME>
    </item>
   </GDATA>
+  <GCODING>
+   <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
+   <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
+  </GCODING>
   <sf:VARHEADER>
    <sf:item>
     <PAGEFORMAT>LETTER</PAGEFORMAT>
@@ -230,43 +234,6 @@
                <sf:NODE>
                 <NODETYPE>RC</NODETYPE>
                 <sf:SUCC>
-                 <sf:item>
-                  <sf:NODE>
-                   <NODETYPE>CO</NODETYPE>
-                   <sf:OBJ>
-                    <sf:CODE>
-                     <NAME>
-                      <INAME>%CODE1</INAME>
-                     </NAME>
-                     <CAPTION>Init</CAPTION>
-                     <PLIST>
-                      <item>
-                       <OPD>VBELN</OPD>
-                       <OUTIN>I</OUTIN>
-                      </item>
-                      <item>
-                       <OPD>IT_VBAP</OPD>
-                       <OUTIN>O</OUTIN>
-                      </item>
-                     </PLIST>
-                     <CODE>
-                      <item>SELECT vbeln posnr matnr matwa FROM vbap</item>
-                      <item>  INTO TABLE it_vbap WHERE vbeln = vbeln.</item>
-                     </CODE>
-                     <T_CAPTION>
-                      <item>
-                       <LANGU>E</LANGU>
-                       <FORMNAME>ZTEST_SF</FORMNAME>
-                       <OBJTYPE>CO</OBJTYPE>
-                       <INAME>%CODE1</INAME>
-                       <CAPTION>Init</CAPTION>
-                      </item>
-                     </T_CAPTION>
-                    </sf:CODE>
-                   </sf:OBJ>
-                   <sf:SUCC/>
-                  </sf:NODE>
-                 </sf:item>
                  <sf:item>
                   <sf:NODE>
                    <NODETYPE>TX</NODETYPE>
