@@ -149,7 +149,7 @@
     <STANDARD>X</STANDARD>
    </item>
   </INTERFACE>
-  <TYPES>
+  <GTYPES>
    <item>TYPES: BEGIN OF ty_vbap,</item>
    <item>         vbeln TYPE vbeln_va,</item>
    <item>         posnr TYPE posnr_va,</item>
@@ -157,7 +157,7 @@
    <item>         matwa TYPE matwa,</item>
    <item>       END OF ty_vbap.</item>
    <item>TYPES: ty_vbap1 TYPE STANDARD TABLE OF ty_vbap.</item>
-  </TYPES>
+  </GTYPES>
   <GDATA>
    <item>
     <NAME>IT_VBAP</NAME>
