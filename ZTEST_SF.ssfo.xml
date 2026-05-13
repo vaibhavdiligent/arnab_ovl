@@ -259,7 +259,7 @@
                  </sf:item>
                  <sf:item>
                   <sf:NODE>
-                   <NODETYPE>TX</NODETYPE>
+                   <NODETYPE>TI</NODETYPE>
                    <sf:OBJ>
                     <sf:TEXT>
                      <NAME>
@@ -343,7 +343,7 @@
                    <sf:SUCC>
                     <sf:item>
                      <sf:NODE>
-                      <NODETYPE>TX</NODETYPE>
+                      <NODETYPE>TI</NODETYPE>
                       <sf:OBJ>
                        <sf:TEXT>
                         <NAME>
